@@ -1,0 +1,60 @@
+%%=============================================================================
+%% Inleiding
+%%=============================================================================
+
+\chapter{\IfLanguageName{dutch}{Inleiding}{Introduction}}%
+\label{ch:inleiding}
+
+Kubernetes is een snel opkomende en krachtige opensourcesoftware voor het automatiseren en beheren van containers. Deze containers kunnen Docker of een andere technologie zijn. Om deze containers te laten communiceren en samenwerken, worden deze toegepast binnen een Kubernetes cluster. 
+
+De scope van dit onderzoek omvat de belangrijkste zaken die te maken hebben met Docker containers te beveiligen binnen een Kubernetes cluster. De configuratie van de applicaties binnen deze containers zijn niet van toepassing in deze paper. In dit onderzoek worden tools zoals kubehunter en kube-bench besproken voor het analyseren en het uitvoeren van beveiligings checks. 
+
+De inleiding moet de lezer net genoeg informatie verschaffen om het onderwerp te begrijpen en in te zien waarom de onderzoeksvraag de moeite waard is om te onderzoeken. In de inleiding ga je literatuurverwijzingen beperken, zodat de tekst vlot leesbaar blijft. Je kan de inleiding verder onderverdelen in secties als dit de tekst verduidelijkt. Zaken die aan bod kunnen komen in de inleiding~\autocite{Pollefliet2011}:
+
+\begin{itemize}
+  \item context, achtergrond
+  \item afbakenen van het onderwerp
+  \item verantwoording van het onderwerp, methodologie
+  \item probleemstelling
+  \item onderzoeksdoelstelling
+  \item onderzoeksvraag
+  \item \ldots
+\end{itemize}
+
+\section{\IfLanguageName{dutch}{Probleemstelling}{Problem Statement}}%
+\label{sec:probleemstelling}
+
+Securex, een sociaal zekerings bedrijf gevestigd in gent, maakt gebruik van een Kubernetes omgeving met Docker containers om hun applicaties te laten draaien. Een belangrijk aspect van het gebruik van deze containers is de beveiliging ervan. Zonder effectieve beveiligingsmaatregelen en isolatie van de containers en de Kubernetes omgeving kunnen deze containers blootgesteld worden aan beveiligingsrisico's. Als deze containers gevoelige informatie bevatten kan dit erge gevolgen hebben voor Securex.
+
+
+Uit je probleemstelling moet duidelijk zijn dat je onderzoek een meerwaarde heeft voor een concrete doelgroep. De doelgroep moet goed gedefinieerd en afgelijnd zijn. Doelgroepen als ``bedrijven,'' ``KMO's'', systeembeheerders, enz.~zijn nog te vaag. Als je een lijstje kan maken van de personen/organisaties die een meerwaarde zullen vinden in deze bachelorproef (dit is eigenlijk je steekproefkader), dan is dat een indicatie dat de doelgroep goed gedefinieerd is. Dit kan een enkel bedrijf zijn of zelfs één persoon (je co-promotor/opdrachtgever).
+
+\section{\IfLanguageName{dutch}{Onderzoeksvraag}{Research question}}%
+\label{sec:onderzoeksvraag}
+
+Wees zo concreet mogelijk bij het formuleren van je onderzoeksvraag. Een onderzoeksvraag is trouwens iets waar nog niemand op dit moment een antwoord heeft (voor zover je kan nagaan). Het opzoeken van bestaande informatie (bv. ``welke tools bestaan er voor deze toepassing?'') is dus geen onderzoeksvraag. Je kan de onderzoeksvraag verder specifiëren in deelvragen. Bv.~als je onderzoek gaat over performantiemetingen, dan 
+
+\section{\IfLanguageName{dutch}{Onderzoeksdoelstelling}{Research objective}}%
+\label{sec:onderzoeksdoelstelling}
+
+Securex verwacht dat de beveiliging van een Docker container in een Kubernetes omgeving zo volledig mogelijk in kaart wordt gebracht. Dit houdt in dat de verschillende tools, bedreigingen en oplossingen uitvoerig onderzocht worden. Het resultaat van dit onderzoek zal Securex in staat stellen om hun containers beter te isoleren en beschermen tegen bedreigingen en beveiligingsrisico's.
+
+
+Wat is het beoogde resultaat van je bachelorproef? Wat zijn de criteria voor succes? Beschrijf die zo concreet mogelijk. Gaat het bv.\ om een proof-of-concept, een prototype, een verslag met aanbevelingen, een vergelijkende studie, enz.
+
+\section{\IfLanguageName{dutch}{Opzet van deze bachelorproef}{Structure of this bachelor thesis}}%
+\label{sec:opzet-bachelorproef}
+
+% Het is gebruikelijk aan het einde van de inleiding een overzicht te
+% geven van de opbouw van de rest van de tekst. Deze sectie bevat al een aanzet
+% die je kan aanvullen/aanpassen in functie van je eigen tekst.
+
+De rest van deze bachelorproef is als volgt opgebouwd:
+
+In Hoofdstuk~\ref{ch:stand-van-zaken} wordt een overzicht gegeven van de stand van zaken binnen het onderzoeksdomein, op basis van een literatuurstudie.
+
+In Hoofdstuk~\ref{ch:methodologie} wordt de methodologie toegelicht en worden de gebruikte onderzoekstechnieken besproken om een antwoord te kunnen formuleren op de onderzoeksvragen.
+
+% TODO: Vul hier aan voor je eigen hoofstukken, één of twee zinnen per hoofdstuk
+
+In Hoofdstuk~\ref{ch:conclusie}, tenslotte, wordt de conclusie gegeven en een antwoord geformuleerd op de onderzoeksvragen. Daarbij wordt ook een aanzet gegeven voor toekomstig onderzoek binnen dit domein.

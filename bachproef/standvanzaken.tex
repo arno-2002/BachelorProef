@@ -41,7 +41,13 @@ Hieronder volgt een lijst met belangrijke terminologie binnen Kubernetes:
 
 \begin{itemize}
     \item Een pod is een groep van één of meer containers \autocite{habbal-2020}. Alle containers in een pod delen hetzelfde IP adres en dezelfde middelen zoals volumes \textcite{hohn-2020}. In makkelijkere woorden is een pod een enkele instantie van een applicatie die kan worden gerepliceerd als er meer instanties nodig zijn om de toenemende druk op te vangen \textcite{habbal-2020}. Gerepliceerde pods zijn creeert en beheert als een groep door de middelen en de control plane \textcite{kubernetesDocs-2022}. 
-    \item \textit{Een service is een methode om een netwerktoepassing die als een of meer Pods in uw cluster draait, bloot te stellen \autocite{kubernetesDocs-2022}.} 
+    \item \textit{Een service is een methode om een netwerktoepassing die als een of meer Pods in uw cluster draait, bloot te stellen \autocite{kubernetesDocs-2022}.} De Kubernetes Service API is een abstractie waarmee het mogelijk is om groepen Pods over een netwerk te kunnen verspreiden. Elk Service-object definieert een logische verzameling eindpunten (meestal Pods) en een beleid om die Pods beschikbaar te maken. \autocite{kubernetesDocs-2022}
+    \item Namespace:
+    \item kubelet
+    \item ConfigMap
+    
+    
+    
 \end{itemize}
  
 

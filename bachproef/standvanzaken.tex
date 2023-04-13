@@ -23,7 +23,7 @@
 \end{flushleft}
 
 \section{Kubernetes}
-Kubernetes, ook wel afgekort als K8s, is een gratis en open-source systeem dat wordt gebruikt om de implementatie, schaling en het beheer van containerapplicaties te automatiseren. 
+Kubernetes, ook wel afgekort als K8s, is een gratis en open-source systeem dat wordt gebruikt om de implementatie, schaling en het beheer van containerapplicaties te automatiseren \autocite{KubernetesDocs-2023}. 
 Het biedt de mogelijkheid om containers die deel uitmaken van een applicatie te groeperen en te beheren als logische eenheden, waardoor het gemakkelijk wordt om deze te ontdekken en te beheren \autocite{KubernetesDocs-2023}.
 Docker is een containerisatieplatform, terwijl Kubernetes een orkestratietool is voor het beheer van meerdere containers.
 Docker biedt een eenvoudige en efficiënte methode voor het aanmaken en inzetten van containers, terwijl Kubernetes complexere functionaliteit biedt voor het beheer van containers op schaal \autocite{banerjee-2023}.
@@ -33,23 +33,26 @@ Voor grotere, complexere projecten die uitgebreid containerbeheer vereisen, is K
 \autocite{KubernetesDocs-2023} Bij het ontplooien van kubernetes ontstaat er een cluster. Een cluster bestaat uit een groep machines zogenaamd "worker nodes". Zo een node heeft verschillende componenten zoals een Kubelet, een kube-proxy en een container-runtime.
 Binnen deze worker nodes zijn er pods met containers in. In deze containers kunnen applicaties zoals een SQL database of een website draaien. 
 \autocite{KubernetesDocs-2023} Binnen een cluster is er ook een control plane die de globale beslissingen neemt over bijvoorbeeld scheduling of een pod starten. De control plane beheert ook de nodes. 
-\autocite{KubernetesDocs-2023} Een control plane bestaat uit verschillende componenten zoals een Kube-apiserver, etcd, kube-scheduler en een kube-controller-manager.
+\autocite{KubernetesDocs-2023} Een control plane bestaat uit verschillende componenten zoals een Kube-apiserver, etcd, kube-scheduler en een kube-controller-manager. 
+De kube-apiserver is een belangrijk component van de control plane want deze is verantwoordelijk voor de communicatie van gebruikers, de cluster en externe componenten. 
+De kubernetes API laat toe om de staat van objecten zoals pods, namespaces te manipuleren.
+De etcd binnen een control plane is een key value opslagplaats voor alle data van de cluster, het is belangrijk dat ten alle tijde deze data beschermd is van ongewilde manipulatie. 
 Om voor fouttolerantie en hoge beschikbaarheid te zorgen, draait de control plane in productiescenario's meestal op vele machines, en een cluster bevat doorgaans meerdere nodes \autocite{KubernetesDocs-2023}. 
 In leer- of middelenbeperkte omgevingen is er meestal maar één node aanwezig.
 
-Hieronder volgt een lijst met belangrijke terminologie binnen Kubernetes:
-
+Hieronder volgt een lijst met belangrijke terminologie binnen Kubernetes:ConfigMap
+kubeletetcd
 \begin{itemize}
     \item Een pod is een groep van één of meer containers \autocite{habbal-2020}. Alle containers in een pod delen hetzelfde IP adres en dezelfde middelen zoals volumes \textcite{hohn-2020}. In makkelijkere woorden is een pod een enkele instantie van een applicatie die kan worden gerepliceerd als er meer instanties nodig zijn om de toenemende druk op te vangen \textcite{habbal-2020}. Gerepliceerde pods zijn creeert en beheert als een groep door de middelen en de control plane \textcite{kubernetesDocs-2022}. 
-    \item \textit{Een service is een methode om een netwerktoepassing die als een of meer Pods in uw cluster draait, bloot te stellen \autocite{kubernetesDocs-2022}.} De Kubernetes Service API is een abstractie waarmee het mogelijk is om groepen Pods over een netwerk te kunnen verspreiden. Elk Service-object definieert een logische verzameling eindpunten (meestal Pods) en een beleid om die Pods beschikbaar te maken. \autocite{kubernetesDocs-2022}
-    \item Namespace:
-    \item kubelet
-    \item ConfigMap
-    
-    
-    
+    \item \textit{Een service is een methode om een netwerktoepassing die als een of meer Pods in uw cluster draait, bloot te stellen \autocite{kubernetesDocs-2022}.} De Kubernetes Service API is een abstractie waarmee het mogelijk is om groepen Pods over een netwerk te kunnen verspreiden. 
+    \item Een namespace dient om objecten te organiseren in een cluster. Een soort folder die objecten houd \autocite{burns2022kubernetes}.  
+    \item De kubelet is het belangrijkste component dat op elke node aanwezig is \autocite{vayghan2019kubernetes}. Kubelet draait de Docker-containers die aan zijn node zijn toegewezen, voert regelmatig gezondheidscontroles op ze uit, en rapporteert hun status en die van de node aan de master \autocite{vayghan2019kubernetes}.
+    \item Een volume maakt het mogelijk om opslag te delen tussen de containers in een pod, of tussen pods op dezelfde node \autocite{baier2017getting}.
+    \item De ConfigMap binnen kubernetes is een soort volume en een middel voor het opslaan van configuratie data \autocite{kubernetesDocs-2023}. Het is een manier om configuratie data te injecteren in pods \autocite{kubernetesDocs-2023}.
+    \item Kubectl is een commmand-line tool om opdrachten, ook wel commando's genoemd, te kunnen uitvoeren op de cluters control plane. Deze command-line tool maakt gebruik van de Kubernetes API \autocite{kubernetesDocs-2023}. 
 \end{itemize}
  
+
 
 
 
@@ -62,4 +65,3 @@ Hieronder volgt een lijst met belangrijke terminologie binnen Kubernetes:
 \textcite{Knuth1998} schreef een van de standaardwerken over sorteer- en zoekalgoritmen. Experten zijn het erover eens dat cloud computing een interessante opportuniteit vormen, zowel voor gebruikers als voor dienstverleners op vlak van informatietechnologie~\autocite{Creeger2009}.
 
 \lipsum[7-20]
-

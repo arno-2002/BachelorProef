@@ -34,9 +34,9 @@ Voor grotere, complexere projecten die uitgebreid containerbeheer vereisen, is K
 Binnen deze worker nodes zijn er pods met containers in. In deze containers kunnen applicaties zoals een SQL database of een website draaien. 
 \autocite{KubernetesDocs-2023} Binnen een cluster is er ook een control plane die de globale beslissingen neemt over bijvoorbeeld scheduling of een pod starten. De control plane beheert ook de nodes. 
 \autocite{KubernetesDocs-2023} Een control plane bestaat uit verschillende componenten zoals een Kube-apiserver, etcd, kube-scheduler en een kube-controller-manager. 
-De kube-apiserver is een belangrijk component van de control plane want deze is verantwoordelijk voor de communicatie van gebruikers, de cluster en externe componenten. 
-De kubernetes API laat toe om de staat van objecten zoals pods, namespaces te manipuleren.
-De etcd binnen een control plane is een key value opslagplaats voor alle data van de cluster, het is belangrijk dat ten alle tijde deze data beschermd is van ongewilde manipulatie. 
+De kube-apiserver is een belangrijk component van de control plane want deze is verantwoordelijk voor de communicatie van gebruikers, de cluster en externe componenten \autocite{hohn-2020}. 
+De kubernetes API laat toe om de staat van objecten zoals pods, namespaces te manipuleren \autocite{KubernetesDocs-2023}.
+De etcd binnen een control plane is een key value opslagplaats voor alle data van de cluster, het is belangrijk dat ten alle tijde deze data beschermd is van ongewilde manipulatie \autocite{KubernetesDocs-2023}. 
 Om voor fouttolerantie en hoge beschikbaarheid te zorgen, draait de control plane in productiescenario's meestal op vele machines, en een cluster bevat doorgaans meerdere nodes \autocite{KubernetesDocs-2023}. 
 In leer- of middelenbeperkte omgevingen is er meestal maar één node aanwezig.
 
@@ -44,12 +44,15 @@ Hieronder volgt een lijst met belangrijke terminologie binnen Kubernetes:
 kubeletetcd
 \begin{itemize}
     \item Een pod is een groep van één of meer containers \autocite{habbal-2020}. Alle containers in een pod delen hetzelfde IP adres en dezelfde middelen zoals volumes \autocite{hohn-2020}. In makkelijkere woorden is een pod een enkele instantie van een applicatie die kan worden gerepliceerd als er meer instanties nodig zijn om de toenemende druk op te vangen \autocite{habbal-2020}. Gerepliceerde pods zijn creeert en beheert als een groep door de middelen en de control plane \textcite{KubernetesDocs-2023}. 
-    \item \textit{Een service is een methode om een netwerktoepassing die als een of meer Pods in uw cluster draait, bloot te stellen \autocite{KubernetesDocs-2023}.} De Kubernetes Service API is een abstractie waarmee het mogelijk is om groepen Pods over een netwerk te kunnen verspreiden. 
+    \item \textit{Een service is een methode om een netwerktoepassing die als een of meer Pods in uw cluster draait, bloot te stellen \autocite{KubernetesDocs-2023}.}
     \item Een namespace dient om objecten te organiseren in een cluster. Een soort folder die objecten houd \autocite{burns-2022}.  
     \item De kubelet is het belangrijkste component dat op elke node aanwezig is \autocite{Vayghan2019}. Kubelet draait de Docker-containers die aan zijn node zijn toegewezen, voert regelmatig gezondheidscontroles op ze uit, en rapporteert hun status en die van de node aan de master \autocite{Vayghan2019}.
     \item Een volume maakt het mogelijk om opslag te delen tussen de containers in een pod, of tussen pods op dezelfde node \autocite{Baier2017}.
     \item De ConfigMap binnen kubernetes is een soort volume en een middel voor het opslaan van configuratie data \autocite{KubernetesDocs-2023}. Het is een manier om configuratie data te injecteren in pods \autocite{KubernetesDocs-2023}.
-    \item Kubectl is een commmand-line tool om opdrachten, ook wel commando's genoemd, te kunnen uitvoeren op de cluters control plane. Deze command-line tool maakt gebruik van de Kubernetes API \autocite{KubernetesDocs-2023}. 
+    \item Kubectl is een commmand-line tool om opdrachten, ook wel commando's genoemd, te kunnen uitvoeren op de control plane van de cluster. Deze command-line tool maakt gebruik van de Kubernetes API \autocite{KubernetesDocs-2023}. 
 \end{itemize}
 
-\lipsum[7-20]
+
+\section{Kwetsbaarheden}
+
+

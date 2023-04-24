@@ -29,7 +29,7 @@ Docker is een containerisatieplatform, terwijl Kubernetes een orkestratietool is
 Docker biedt een eenvoudige en efficiënte methode voor het aanmaken en inzetten van containers, terwijl Kubernetes complexere functionaliteit biedt voor het beheer van containers op schaal \autocite{banerjee-2023}.
 Voor grotere, complexere projecten die uitgebreid containerbeheer vereisen, is Kubernetes een krachtiger en flexibeler hulpmiddel.
 
-\subsection{Componenten}
+\subsection{Kubernetes Componenten - Overview}
 \autocite{KubernetesDocs-2023} Bij het ontplooien van kubernetes ontstaat er een cluster. Een cluster bestaat uit een groep machines zogenaamd "worker nodes". Zo een node heeft verschillende componenten zoals een Kubelet, een kube-proxy en een container-runtime.
 Binnen deze worker nodes zijn er pods met containers in. In deze containers kunnen applicaties zoals een SQL database of een website draaien. 
 \autocite{KubernetesDocs-2023} Binnen een cluster is er ook een control plane die de globale beslissingen neemt over bijvoorbeeld scheduling of een pod starten. De control plane beheert ook de nodes. 
@@ -40,19 +40,50 @@ De etcd binnen een control plane is een key value opslagplaats voor alle data va
 Om voor fouttolerantie en hoge beschikbaarheid te zorgen, draait de control plane in productiescenario's meestal op vele machines, en een cluster bevat doorgaans meerdere nodes \autocite{KubernetesDocs-2023}. 
 In leer- of middelenbeperkte omgevingen is er meestal maar één node aanwezig.
 
-Hieronder volgt een lijst met belangrijke terminologie binnen Kubernetes:
-kubeletetcd
-\begin{itemize}
-    \item Een pod is een groep van één of meer containers \autocite{habbal-2020}. Alle containers in een pod delen hetzelfde IP adres en dezelfde middelen zoals volumes \autocite{hohn-2020}. In makkelijkere woorden is een pod een enkele instantie van een applicatie die kan worden gerepliceerd als er meer instanties nodig zijn om de toenemende druk op te vangen \autocite{habbal-2020}. Gerepliceerde pods zijn creeert en beheert als een groep door de middelen en de control plane \textcite{KubernetesDocs-2023}. 
-    \item \textit{Een service is een methode om een netwerktoepassing die als een of meer Pods in uw cluster draait, bloot te stellen \autocite{KubernetesDocs-2023}.}
-    \item Een namespace dient om objecten te organiseren in een cluster. Een soort folder die objecten houd \autocite{burns-2022}.  
-    \item De kubelet is het belangrijkste component dat op elke node aanwezig is \autocite{Vayghan2019}. Kubelet draait de Docker-containers die aan zijn node zijn toegewezen, voert regelmatig gezondheidscontroles op ze uit, en rapporteert hun status en die van de node aan de master \autocite{Vayghan2019}.
-    \item Een volume maakt het mogelijk om opslag te delen tussen de containers in een pod, of tussen pods op dezelfde node \autocite{Baier2017}.
-    \item De ConfigMap binnen kubernetes is een soort volume en een middel voor het opslaan van configuratie data \autocite{KubernetesDocs-2023}. Het is een manier om configuratie data te injecteren in pods \autocite{KubernetesDocs-2023}.
-    \item Kubectl is een commmand-line tool om opdrachten, ook wel commando's genoemd, te kunnen uitvoeren op de control plane van de cluster. Deze command-line tool maakt gebruik van de Kubernetes API \autocite{KubernetesDocs-2023}. 
-\end{itemize}
+\subsubsection{Pod}
+Een pod is een groep van één of meer containers \autocite{habbal-2020}.
+Alle containers in een pod delen hetzelfde IP adres en dezelfde middelen zoals volumes \autocite{hohn-2020}.
+In makkelijkere woorden is een pod een enkele instantie van een applicatie die kan worden gerepliceerd als er meer instanties nodig zijn om de toenemende druk op te vangen \autocite{habbal-2020}.
+Gerepliceerde pods zijn creëert en beheert als een groep door de middelen en de control plane \textcite{KubernetesDocs-2023}.
+
+\subsubsection{Service}
+\textit{Een service is een methode om een netwerktoepassing die als een of meer Pods in uw cluster draait, bloot te stellen \autocite{KubernetesDocs-2023}.}
+
+\subsubsection{Namespace}
+Een namespace dient om objecten te organiseren in een cluster.
+Een soort folder die objecten houd \autocite{burns-2022}.
+
+\subsubsection{Kubelet}
+De kubelet is het belangrijkste component dat op elke node aanwezig is \autocite{Vayghan2019}.
+Kubelet draait de Docker-containers die aan zijn node zijn toegewezen, voert regelmatig gezondheidscontroles op ze uit, en rapporteert hun status en die van de node aan de master \autocite{Vayghan2019}.
+
+\subsubsection{Volume}
+Een volume maakt het mogelijk om opslag te delen tussen de containers in een pod, of tussen pods op dezelfde node \autocite{Baier2017}.
+
+\subsubsection{ConfigMap}
+De ConfigMap binnen kubernetes is een soort volume en een middel voor het opslaan van configuratie data \autocite{KubernetesDocs-2023}.
+Het is een manier om configuratie data te injecteren in pods \autocite{KubernetesDocs-2023}.
+
+\subsubsection{Kubectl}
+Kubectl is een commmand-line tool om opdrachten, ook wel commando's genoemd, te kunnen uitvoeren op de control plane van de cluster.
+Deze command-line tool maakt gebruik van de Kubernetes API \autocite{KubernetesDocs-2023}.
+
+\begin{flushleft}
+    \begin{figure}[h]
+        \includegraphics[width=.49\textwidth]{graphics/3-Figure1-1.png}
+        \caption{\label{fig:KubernetesOverview}Deze afbeelding geeft een duidelijk overzicht van de componenten van kubernetes en hoe ze met elkaar interacteren.  \autocite{shamim2020xi}}
+    \end{figure} 
+\end{flushleft}
 
 
 \section{Kwetsbaarheden}
+Kubernetes is een steeds stijgende technologie die meer word gebruikt. \autocite{KubernetesDocs-2023} Grote bedrijven zoals ING, Nokia, Huawei en adidas gebruiken kubernetes om hun applicaties en services efficiënt te beheren en schaalbaar te maken. Door de stijging van het gebruik van Kubernetes is het belangrijk dat de beveiliging optimaal blijft. De functies van Kubernetes blijven uitbreiden en oude functies worden geüpdatet. Daarom is het van belang om Kubernetes altijd te onderhouden op vlak van beveiliging. Bij elke wijziging of uitbreiding is er een kans dat nieuwe kwetsbaarheden opduiken. Hackers of mensen met slechte bedoelingen blijven technologieën en technieken uitvinden om kwetsbaarheden te ontdekken dus het is van belang om de veiligheid van het systeem te blijven updaten. Elke technologie heeft kwetsbaarheden. Het is geen garantie dat deze kwetsbaarheden verdwijnen zijn door een sterke beveiliging.
+Door middel van een sterke beveiliging kunnen deze kwetsbaarheden beperkt worden. 
+
+Er zijn meerdere manieren hoe Kubernetes kwetsbaar is. 
+
+
+
+
 
 

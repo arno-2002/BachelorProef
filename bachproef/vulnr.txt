@@ -1,0 +1,7 @@
+Als ge extra functies toevoegd dan kan je extra kwetsbaarheden aan je platform toevoegen.
+
+Elke plugin checken en niet alleen op kubernetes zelf.
+
+Zijn er tools beschikbaar die software kan checken die je installeerd op je kubernetes?
+
+Zijn er tools die beschikbaar zijn die checken of je pods of control plane checken op kwetsbaarheden (configuratie)? Configuratie valideren?

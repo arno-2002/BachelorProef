@@ -70,18 +70,68 @@ Deze command-line tool maakt gebruik van de Kubernetes API \autocite{KubernetesD
 
 \begin{flushleft}
     \begin{figure}[h]
-        \includegraphics[width=.49\textwidth]{graphics/3-Figure1-1.png}
+        \includegraphics[width=.70\textwidth]{graphics/3-Figure1-1.png}
         \caption{\label{fig:KubernetesOverview}Deze afbeelding geeft een duidelijk overzicht van de componenten van kubernetes en hoe ze met elkaar interacteren.  \autocite{shamim2020xi}}
     \end{figure} 
 \end{flushleft}
 
 
 \section{Kwetsbaarheden}
-Kubernetes is een steeds stijgende technologie die meer word gebruikt. \autocite{KubernetesDocs-2023} Grote bedrijven zoals ING, Nokia, Huawei en adidas gebruiken kubernetes om hun applicaties en services efficiënt te beheren en schaalbaar te maken. Door de stijging van het gebruik van Kubernetes is het belangrijk dat de beveiliging optimaal blijft. De functies van Kubernetes blijven uitbreiden en oude functies worden geüpdatet. Daarom is het van belang om Kubernetes altijd te onderhouden op vlak van beveiliging. Bij elke wijziging of uitbreiding is er een kans dat nieuwe kwetsbaarheden opduiken. Hackers of mensen met slechte bedoelingen blijven technologieën en technieken uitvinden om kwetsbaarheden te ontdekken dus het is van belang om de veiligheid van het systeem te blijven updaten. Elke technologie heeft kwetsbaarheden. Het is geen garantie dat deze kwetsbaarheden verdwijnen zijn door een sterke beveiliging.
+Kubernetes is een steeds stijgende technologie die meer word gebruikt. \autocite{KubernetesDocs-2023} Grote bedrijven zoals ING, Nokia, Huawei en adidas gebruiken kubernetes om hun applicaties en services efficiënt te beheren en schaalbaar te maken. Door de stijging van het gebruik van Kubernetes is het belangrijk dat de beveiliging optimaal blijft. De functies van Kubernetes blijven uitbreiden en oude functies worden geüpdatet. Daarom is het van belang om Kubernetes altijd te onderhouden op vlak van beveiliging. Bij elke wijziging of uitbreiding is er een kans dat nieuwe kwetsbaarheden opduiken. Hackers of mensen met slechte bedoelingen blijven technologieën en technieken uitvinden om kwetsbaarheden te ontdekken dus het is van belang om de veiligheid van het systeem te blijven updaten. Elke technologie heeft kwetsbaarheden. Het is geen garantie dat deze verdwijnen door een sterke beveiliging.
 Door middel van een sterke beveiliging kunnen deze kwetsbaarheden beperkt worden. 
 Er zijn meerdere manieren hoe Kubernetes kwetsbaar kan zijn. 
 
 
-\subsubsection{Misconfiguratie}
-Een studie van \textcite{red-hat-2022} toont aan dat 53 percent van DevOps engineers een veiligheids incident heeft ervaren die te maken heeft met containers en/of kubernetes. 46 percent van de respondenten maken zich het meest zorgen voor veiligheidsrisico's door een misconfiguratie in de containers/Kubernetes. 
+\subsection{Misconfiguratie}
+
+Een studie in 2023 van \textcite{red-hat-2023} toont aan dat 45 percent van DevOps ingenieurs een veiligheidsincident heeft ervaren die te maken heeft met de misconfiguratie van containers en/of kubernetes. Pods in een Kubernetes-cluster kunnen standaard met elkaar communiceren, door deze communicatie ontstaan er veiligheidslekken als het niet goed is geconfigureerd. De grootste bezorgdheid rond misconfiguratie is het blootstellen van gevoelige informatie \autocite{red-hat-2023}. Andere soorten veiligheids misconfiguraties dat de ingenieurs zich zorgen om maken zijn ongepatchte fouten, het behoud van de standaard configuratie, errors in de code en containers met foute rechten. \newline
+
+Vaak voorkomende misconfiguratie fouten kunnen tot grote problemen voor een applicatie zorgen. Namelijk 40 percent zijn het meest bezorgd dat er ransomware aanvallen gebeuren als kubernetes of de containers niet juist zijn geconfigureerd en 53 percent hebben al een ransomware aanval ervaren in de laatste 12 maanden \autocite{red-hat-2023}. De meest voorkomende aanval bij misconfiguraties is een Denial of service (DoS) attack \autocite{red-hat-2023}. Een DoS aanval heeft als doel het systeem onbruikbaar of ontoegankelijk te maken voor de gebruikers. \newline
+
+Standaard configuratie binnen de kubernetes cluster kan leiden tot anonieme niet-geauthenticeerde gebruikers om kwaadaardige activiteiten uit te voeren. Een kwaadwillende gebruiker kan bijvoorbeeld de standaardinstellingen voor een onbeveiligde toegang achterhalen, toegang krijgen tot de control plane en schadelijke commando's uitvoeren \autocite{shamim2020xi}.
+
+\paragraph{etcd}
+Als een aanvaller toegang krijgt tot de etcd, kan de aanvaller potentiële toegang tot gevoelige data verkrijgen of de staat van de cluster aanpassen of data aanpassen. Fout geconfigureerde etcd instellingen kunnen de database open zetten tot aanvallen van buitenaf en ongewilde toegang \autocite{KubernetesDocs-2023}.
+
+
+
+\subsection{Software supply chain}
+35 percent van de respondenten in de studie van \textcite{red-hat-2023} zijn het meest bezorgd over kwetsbaarheden in de software gerelateerd aan de software supply chain. Een software supply chain is de verzameling van de componenten, softwares, tools die gebruikt worden om een applicatie te bouwen. Hierbij komen open-source softwares aanbod en het gebruik hiervan creëren uitdagingen in de beveiliging van de applicatie \autocite{red-hat-2023}. Kwetsbaarheden in software kunnen leiden tot grote beveiligingsproblemen, zoals datalekken, malware-infecties en onbevoegde toegang \autocite{shamim2020xi}. De bedrijven van de correspondenten zijn het meest bezorgd in kwetsbare componenten van een applicatie, onvoldoende toegang controle en een tekort aan Software Bill of Materials (SBOM) of herkomst \autocite{red-hat-2023}. Deze studie toont ook aan dat bijna 70 percent van de correspondenten al problemen hebben gehad met een kwetsbare CI/CD pipeline en kwetsbare componenten in de applicatie. \newline
+
+Containers en docker images horen ook tot software supply chain. Containers kunnen bijvoorbeeld kwetsbaarheden en schadelijke software bevatten. Als er zwakheden in een Kubernetes-cluster zitten, wordt het hele container-orkestratiesysteem, evenals de meegeleverde apps, kwetsbaar voor aanvallen \autocite{shamim2020xi}. Als de images en deployment-configuraties van Kubernetes-componenten niet worden gecontroleerd, kan het Kubernetes-cluster vatbaar worden voor onbevoegde gebruikers. Wanneer deze images worden uitgerold, kunnen aanvallers toegang krijgen en gebruikmaken van zwakke plekken \autocite{shamim2020xi}. \newline
+
+Volgens \textcite{OWASP-2023} zijn er drie belangrijke termen binnen de kwetsbaarheden van supply chain:
+\begin{itemize}
+    \item Image Integrity: Dit verwijst naar de zekerheid van een container image. De zekerheid dat de image is wat het beweert te zijn, dat het geen kwaadaardige code bevat en dat het in geen enkele wijze aangepast is. 
+    \item Image Composition: Een container image is opgemaakt uit verschillende lagen. Elke laag representeert bepaalde veiligheidsimplicaties. Container images met onbelangrijke software kunnen gebruikt worden om privileges te verhogen of kwetsbaarheden uit te buiten. 
+    \item Bekende software kwetsbaarheden: Vele container images gebruiken paketten van derde partijen die kwetsbaarheden kunnen bevatten die uitgebuit kunnen worden. Als docker images kwetsbare versies van software bevatten kan dit de kubernetes cluster in gevaar brengen. 
+\end{itemize}
+
+\subsection{API server}
+Via de kubectl command is het mogelijk om API requests naar de server te sturen om middelen en workloads te beheren. Iedereen die schrijf rechten heeft of iedereen die toegang heeft tot de Kubernetes API kan de cluster controleren. 
+Standaard zal de API server luisteren naar poort 8080, deze poort staat bekend tot een zwakke of kwetsbare poort. Iedereen die toegang krijgt tot het systeem waar de master op draait, heeft volledige toegang tot de cluster \autocite{Rice2018}. \newline
+
+Rolgebaseerde toegangscontrole (RBAC) of rolgebaseerde beveiliging is een methode om bij de beveiliging van computersystemen de toegang tot het systeem te regelen voor geautoriseerde gebruikers \autocite{mytilinakis2020attack}. Evenzo wordt het gebruikt als een autorisatiemodus in Kubernetes om elk verzoek dat binnenkomt op de API-server goed te keuren of te weigeren \autocite{mytilinakis2020attack}. Als een gebruiker een API request maakt naar het eindpunt zonder enige authenticatie dan is hij geassocieerd met als een anonieme gebruiker \autocite{mytilinakis2020attack}. Het mogelijk maken van anonieme toegang naar eindpunten kan ook de waarschijnlijkheid van het vrijgeven van gevoelige informatie verhogen \autocite{Rice2018}. Het is onwaarschijnlijk dat deze informatie iets belangrijks in gevaar brengt, maar het kan de aanvaller de weg wijzen naar andere zwakheden \autocite{Rice2018}.
+Bijvoorbeeld als een aanvaller gezondsheidschecks uitvoert op een website kan het achterhalen hoe deze website wordt gedraaid. Via eventueel nginx, IIS of apache.
+
+\subsection{Container runtime}
+In het onderzoek van \textcite{red-hat-2023} toont aan dat 49 percent van de gerelateerde veiligheidsincidenten in kubernetes of containers gebeuren via beveiligingsincidenten tijdens runtime. De container runtime is een van de meest kritische componenten in een kubernetes cluster \autocite{mytilinakis2020attack}. De container runtime dat in dit onderzoek wordt gebruikt is Docker, de meest voorkomende. Docker heeft zelf veiligheidsinstellingen en functies. Kwetsbaarheden in containers kunnen leiden tot het in gevaar brengen van andere componenten. 
+
+\subsection{Images}
+In de sectie van \textit{Software supply chain} wordt er al een klein stukje besproken over images. Images worden meestal uit een publieke plaats gedownload. Het is dus mogelijk dat deze docker images niet altijd de juiste intenties hebben en mogelijks kwade bedoelingen hebben en kwetsbaarheden veroorzaken \autocite{mytilinakis2020attack}. 
+
+
+\section{Tools en oplossingen}
+
+De tools en oplossingen in dit hoofdstuk zijn een hulpmiddel bij het beperken van de kwetsbaarheden van misconfiguratie en software supply chain. 
+
+
+
+
+
+
+
+
+
+
 

@@ -158,16 +158,18 @@ Het is ook mogelijk om dit als runtime te configureren en niet in de configurati
 \begin{itemize}
     \item Draai als niet-root gebruiker: Standaard draaien containers in Kubernetes als de root-gebruiker, die onbeperkte toegang heeft tot het systeem. Het draaien van containers als een niet-rootgebruiker kan de impact van potentiële beveiligingskwetsbaarheden helpen beperken door het niveau van toegang dat de container heeft tot het onderliggende systeem te verlagen \autocite{OWASP-2023}.
     \item Uitvoeren als niet-privilege modus: Standaard hebben containers in Kubernetes geprivilegieerde toegang tot het hostsysteem, wat betekent dat ze acties kunnen uitvoeren die de beveiliging van het systeem in gevaar kunnen brengen. Het draaien van containers in niet-privilege modus kan dit helpen voorkomen door de acties die de container kan uitvoeren te beperken \autocite{OWASP-2023}.
-    \item Stel AllowPrivilegeEscalation in \textit{False}: Deze instelling verbiedt dat kindprocessen meer privileges krijgen dan hun ouderprocessen. Het voorkomt de escalatie van privileges binnen de container, wat beveiligingsproblemen kan helpen voorkomen \autocite{OWASP-2023}.
+    \item Stel AllowPrivilegeEscalation op \textit{False}: Deze instelling verbiedt dat kindprocessen meer privileges krijgen dan hun ouderprocessen. Het voorkomt de escalatie van privileges binnen de container, wat beveiligingsproblemen kan helpen voorkomen \autocite{OWASP-2023}.
 \end{itemize}
 
-
-
-\subsubsection{Tools of middelen}
-
-
-
-\subsection{API server}
+\subsubsection{API server}
+Kubectl maakt contact met de API server via REST calls. Bij zo een REST call naar de API, gaat de API door verschillende stadia \autocite{KubernetesDocs-2023}: 
+\begin{itemize}
+    \item Transport beveiliging
+    \item Authenticatie
+    \item Autorisatie
+    \item Toegangscontrole
+\end{itemize}
+\paragraph{Transport beveiliging}
 Het is belangrijk dat de API server niet naar een poort luistert die kwetsbaar is zoals poort 8080. Volgens \autocite{KubernetesDocs-2023} is de standaard poort 6443. Om zeker te zijn is het mogelijk om te checken op welke poort de api server draait door het commando:
 \begin{minted}{console}
     kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}'
@@ -184,5 +186,31 @@ Bovenstaand commando zal de URL geven van de kubernetes API sever. Om te verifi�
     curl <IP address>:<port>
 \end{minted}
 
+Bij het maken van een API verzoek of REST call wordt er ook een certificaat gepresenteerd. Zo een certificaat kan ondertekent zijn door een certificate authority (CA) of een PKI (public key infrastructure) die connectie heeft met een gekende CA. Het certificaat en de private sleutel kunnen gewijzigd worden door gebruik te maken van volgende commando's \autocite{KubernetesDocs-2023}:
+\begin{minted}{console}
+    kube-apiserver --tsl-cert-file
+    kube-apiserver --tls-private-key-file
+\end{minted}
 
-\subsection{RBAC}
+\paragraph{Authenticatie}
+Eens dat er een veilige transport methode is toegepast kijkt de API naar authenticatie. Authenticatie kan plaatsvinden via clientcertificaten, wachtwoorden, tokens, serviceaccounts. Meerdere authenticatiemethoden kunnen worden ingesteld en geprobeerd.
+Als een API verzoek niet kan worden geauthenticeerd dan is het verzoek geweigerd met de HTTP status code 401 \autocite{KubernetesDocs-2023}.  
+
+\paragraph{Autorisatie}
+Geauthenticeerde verzoeken moeten worden geautoriseerd. Een verzoek moet een gebruikersnaam, actie en object van de actie bevatten. Het verzoek is geautoriseerd als het niet wordt geweigerd en de gebruiker toegang heeft om die actie uit te voeren \autocite{KubernetesDocs-2023}.
+Kubernetes maakt gebruik van meerdere authorisatiemethodes zoals ABAC, RBAC en Webhook mode \autocite{KubernetesDocs-2023}. 
+
+\paragraph{Toegangscontrole}
+Toegangscontrolemodules kunnen verzoeken wijzigen of weigeren. Toegangscontrolemodules zijn softwaremodules die verzoeken kunnen wijzigen of weigeren. Deze modules   handelen verzoeken af die objecten creëren, wijzigen, verwijderen of verbinden. 
+
+
+\subsubsection{RBAC}
+
+
+\subsubsection{Tools of middelen}
+
+
+
+
+
+

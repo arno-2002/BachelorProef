@@ -154,7 +154,14 @@ spec:
         readOnlyRootFilesystem: true
 \end{minted}
 
-Het is ook mogelijk om dit als runtime te configureren en niet in de configuratie. Dit wordt uitgebreider besproken in \ref{ch:Proof-of-concept}. 
+Het is ook mogelijk om dit als runtime te configureren en niet in de configuratie. De applicatie kan deze miconfiguratie mitigeren door volgende maatregelen te nemen \autocite{OWASP-2023}:
+\begin{itemize}
+    \item Draai als niet-root gebruiker: Standaard draaien containers in Kubernetes als de root-gebruiker, die onbeperkte toegang heeft tot het systeem. Het draaien van containers als een niet-rootgebruiker kan de impact van potentiële beveiligingskwetsbaarheden helpen beperken door het niveau van toegang dat de container heeft tot het onderliggende systeem te verlagen \autocite{OWASP-2023}.
+    \item Uitvoeren als niet-privilege modus: Standaard hebben containers in Kubernetes geprivilegieerde toegang tot het hostsysteem, wat betekent dat ze acties kunnen uitvoeren die de beveiliging van het systeem in gevaar kunnen brengen. Het draaien van containers in niet-privilege modus kan dit helpen voorkomen door de acties die de container kan uitvoeren te beperken \autocite{OWASP-2023}.
+    \item Stel AllowPrivilegeEscalation in \textit{False}: Deze instelling verbiedt dat kindprocessen meer privileges krijgen dan hun ouderprocessen. Het voorkomt de escalatie van privileges binnen de container, wat beveiligingsproblemen kan helpen voorkomen \autocite{OWASP-2023}.
+\end{itemize}
+
+
 
 \subsubsection{Tools of middelen}
 

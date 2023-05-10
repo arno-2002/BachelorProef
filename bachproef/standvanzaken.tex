@@ -126,8 +126,8 @@ In de sectie van \textit{Software supply chain} wordt er al een klein stukje bes
 \subsection{misconfiguratie}
 Deze sectie bespreekt algemeen advies hoe de configuratie kan verbetert worden en bespreekt ook verschillende tools voor het verifiëren van de configuratie.\newline
 
-Om beveiliging in te stellen op een pod kan dit met het veld "securityContext" in de specificatie van de pod. "securityContext" is een \textit{PodSecurityContext} object. 
-Deze beveiligingsinstellingen gelden voor alle containers binnen de pod. 
+Om beveiliging in te stellen op een pod kan dit met het veld "securityContext" in de specificatie van de pod. "securityContext" is een \textit{PodSecurityContext} object \autocite{KubernetesDocs-2023}. 
+Deze beveiligingsinstellingen gelden voor alle containers binnen de pod \autocite{KubernetesDocs-2023}. 
 Volgens \textcite{OWASP-2023} is een proces als root gebruiker draaien een vaak voorkomende fout. Voor sommige workloads is de root gebruiker een vereiste maar het is aangeraden om het te vermijden. Als de container met root rechten gecompromitteerd wordt dan zou de aanvaller root rechten hebben om schadelijke acties te kunnen uitvoeren \autocite{OWASP-2023}.  
 
 Een ander voorbeeld van \textcite{OWASP-2023} beschrijft dat het aangeraden is om read-only (alleen-lees) bestandssystemen te gebruiken. Alleen-lees bestandssystemen limiteren de impact van een gecompromitteerde container op een kubernetes node \autocite{OWASP-2023}. Dit zorgt ervoor dat een kwaadaardig proces het host systeem niet kan herschrijven of aanpassen.

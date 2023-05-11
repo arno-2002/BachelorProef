@@ -30,7 +30,7 @@ Docker biedt een eenvoudige en efficiënte methode voor het aanmaken en inzetten
 Voor grotere, complexere projecten die uitgebreid containerbeheer vereisen, is Kubernetes een krachtiger en flexibeler hulpmiddel.
 
 \subsection{Kubernetes Componenten - Overview}
-\autocite{KubernetesDocs-2023} Bij het ontplooien van kubernetes ontstaat er een cluster. Een cluster bestaat uit een groep machines zogenaamd "worker nodes". Zo een node heeft verschillende componenten zoals een Kubelet, een kube-proxy en een container-runtime.
+\autocite{KubernetesDocs-2023} Bij het ontplooien van kubernetes ontstaat er een cluster. Een cluster bestaat uit een groep machines zogenaamd \textit{worker nodes}. Zo een node heeft verschillende componenten zoals een Kubelet, een kube-proxy en een container-runtime.
 Binnen deze worker nodes zijn er pods met containers in. In deze containers kunnen applicaties zoals een SQL database of een website draaien. 
 \autocite{KubernetesDocs-2023} Binnen een cluster is er ook een control plane die de globale beslissingen neemt over bijvoorbeeld scheduling of een pod starten. De control plane beheert ook de nodes. 
 \autocite{KubernetesDocs-2023} Een control plane bestaat uit verschillende componenten zoals een Kube-apiserver, etcd, kube-scheduler en een kube-controller-manager. 
@@ -77,9 +77,6 @@ Deze command-line tool maakt gebruik van de Kubernetes API \autocite{KubernetesD
 
 
 \section{Kwetsbaarheden}
-Kubernetes is een steeds stijgende technologie die meer word gebruikt. \autocite{KubernetesDocs-2023} Grote bedrijven zoals ING, Nokia, Huawei en adidas gebruiken kubernetes om hun applicaties en services efficiënt te beheren en schaalbaar te maken. Door de stijging van het gebruik van Kubernetes is het belangrijk dat de beveiliging optimaal blijft. De functies van Kubernetes blijven uitbreiden en oude functies worden geüpdatet. Daarom is het van belang om Kubernetes altijd te onderhouden op vlak van beveiliging. Bij elke wijziging of uitbreiding is er een kans dat nieuwe kwetsbaarheden opduiken. Hackers of mensen met slechte bedoelingen blijven technologieën en technieken uitvinden om kwetsbaarheden te ontdekken dus het is van belang om de veiligheid van het systeem te blijven updaten. Elke technologie heeft kwetsbaarheden. Het is geen garantie dat deze verdwijnen door een sterke beveiliging.
-Door middel van een sterke beveiliging kunnen deze kwetsbaarheden beperkt worden.
-
 
 \subsection{Misconfiguratie}
 Een studie in 2023 van \textcite{red-hat-2023} toont aan dat 45 percent van DevOps ingenieurs een veiligheidsincident heeft ervaren die te maken heeft met de misconfiguratie van containers en/of clusters. Pods in een Kubernetes-cluster kunnen standaard met elkaar communiceren, door deze communicatie ontstaan er veiligheidslekken als het niet goed is geconfigureerd. De grootste bezorgdheid rond misconfiguratie is het blootstellen van gevoelige informatie \autocite{red-hat-2023}. Andere soorten veiligheids misconfiguraties dat de ingenieurs zich zorgen om maken zijn ongepatchte fouten, het behoud van de standaard configuratie, errors in de code en containers met foute rechten. \newline
@@ -134,7 +131,7 @@ Directe toegang tot de Kubelet API omzeilt toegangscontrole en is niet gelogd do
 \subsection{misconfiguratie}
 Deze sectie bespreekt algemeen advies hoe de configuratie kan verbetert worden en bespreekt ook verschillende tools voor het verifiëren van de configuratie.\newline
 
-Om beveiliging in te stellen op een pod kan dit met het veld "securityContext" in de specificatie van de pod. "securityContext" is een \textit{PodSecurityContext} object \autocite{KubernetesDocs-2023}. 
+Om beveiliging in te stellen op een pod kan dit met het veld \textit{securityContext} in de specificatie van de pod. \textit{securityContext} is een \textit{PodSecurityContext} object \autocite{KubernetesDocs-2023}. 
 Deze beveiligingsinstellingen gelden voor alle containers binnen de pod \autocite{KubernetesDocs-2023}. 
 Volgens \textcite{OWASP-2023} is een proces als root gebruiker draaien een vaak voorkomende fout. Voor sommige workloads is de root gebruiker een vereiste maar het is aangeraden om het te vermijden. Als de container met root rechten gecompromitteerd wordt dan zou de aanvaller root rechten hebben om schadelijke acties te kunnen uitvoeren \autocite{OWASP-2023}.  
 
@@ -144,22 +141,22 @@ Volgens \textcite{OWASP-2023} is het aangeraden om containers zonder privileges 
 
 Deze drie voorbeelden kunnen allemaal vermeden worden in de configuratie van een pod. Dit is bij de sectie 'securitycontext'. 
 \begin{minted}{console}
-apiVersion: v1  
-kind: Pod  
-metadata:  
+    apiVersion: v1  
+    kind: Pod  
+    metadata:  
     name: root-priviliged-readOnly
-spec:  
+    spec:  
     containers:  
-        ...
+    ...
     securityContext:  
-        #Privileges staan aan 
-        privileged: true
-        #root gebruiker staat aan
-        runAsUser: 0
-        #De container runned als een gebruiker en niet als root
-        runAsUser: 5554
-        #alleen-lees rechten zijn geconfigureerd
-        readOnlyRootFilesystem: true
+    #Privileges staan aan 
+    privileged: true
+    #root gebruiker staat aan
+    runAsUser: 0
+    #De container runned als een gebruiker en niet als root
+    runAsUser: 5554
+    #alleen-lees rechten zijn geconfigureerd
+    readOnlyRootFilesystem: true
 \end{minted}
 
 Het is ook mogelijk om dit als runtime te configureren en niet in de configuratie. De applicatie kan deze miconfiguratie mitigeren door volgende maatregelen te nemen \autocite{OWASP-2023}:

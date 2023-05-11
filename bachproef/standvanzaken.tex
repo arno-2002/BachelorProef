@@ -119,6 +119,14 @@ In het onderzoek van \textcite{red-hat-2023} toont aan dat 49 percent van de ger
 \subsection{Images}
 In de sectie van \textit{Software supply chain} wordt er al een klein stukje besproken over images. Images worden meestal uit een publieke plaats gedownload. Het is dus mogelijk dat deze docker images niet altijd de juiste intenties hebben en mogelijks kwade bedoelingen hebben en kwetsbaarheden veroorzaken \autocite{mytilinakis2020attack}. 
 
+\subsection{Kubernetes API server}
+\paragraph{Statische pods}
+Volgens \textcite{KubernetesDocs-2023} is er een risico bij statische pods waarbij aanvallers statische pods kunnen wijzigen of nieuwe statische pods kunnen toevoegen waardoor API-serverconroles worden omzeild. 
+Dit risco kan worden veroorzaakt door foute schrijfrechten toe te kennen tot de locatie waar statische pods zijn opgeslagen.
+
+\paragraph{Kubelet API}
+De kubelet API biedt een HTTP API dat informatie vrijgeeft over de draaiende pods, pod logs en staat het uitvoeren van commando's in containers toe.
+Directe toegang tot de Kubelet API omzeilt toegangscontrole en is niet gelogd door Kubernetes audit logging.
 
 
 \section{Tools en oplossingen}
@@ -161,7 +169,7 @@ Het is ook mogelijk om dit als runtime te configureren en niet in de configurati
     \item Stel AllowPrivilegeEscalation op \textit{False}: Deze instelling verbiedt dat kindprocessen meer privileges krijgen dan hun ouderprocessen. Het voorkomt de escalatie van privileges binnen de container, wat beveiligingsproblemen kan helpen voorkomen \autocite{OWASP-2023}.
 \end{itemize}
 
-\subsubsection{API server}
+\subsubsection{Toegang tot Kubernetes API}
 Kubectl maakt contact met de API server via REST calls. Bij zo een REST call naar de API, gaat de API door verschillende stadia \autocite{KubernetesDocs-2023}: 
 \begin{itemize}
     \item Transport beveiliging
@@ -208,7 +216,6 @@ Toegangscontrolemodules kunnen verzoeken wijzigen of weigeren. Toegangscontrolem
 
 
 \subsubsection{Tools of middelen}
-
 
 
 

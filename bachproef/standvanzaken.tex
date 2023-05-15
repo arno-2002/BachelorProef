@@ -40,7 +40,7 @@ De etcd binnen een control plane is een key value opslagplaats voor alle data va
 Om voor fouttolerantie en hoge beschikbaarheid te zorgen, draait de control plane in productiescenario's meestal op vele machines, en een cluster bevat doorgaans meerdere nodes \autocite{KubernetesDocs-2023}. 
 In leer- of middelenbeperkte omgevingen is er meestal maar één node aanwezig.
 
-\subsubsection{Pod}
+\subsubsection{pod}
 Een pod is een groep van één of meer containers \autocite{habbal-2020}.
 Alle containers in een pod delen hetzelfde IP adres en dezelfde middelen zoals volumes \autocite{hohn-2020}.
 In makkelijkere woorden is een pod een enkele instantie van een applicatie die kan worden gerepliceerd als er meer instanties nodig zijn om de toenemende druk op te vangen \autocite{habbal-2020}.
@@ -123,8 +123,15 @@ Dit risco kan worden veroorzaakt door foute schrijfrechten toe te kennen tot de 
 
 \paragraph{Kubelet API}
 De kubelet API biedt een HTTP API dat informatie vrijgeeft over de draaiende pods, pod logs en staat het uitvoeren van commando's in containers toe.
-Directe toegang tot de Kubelet API omzeilt toegangscontrole en is niet gelogd door Kubernetes audit logging.
+Directe toegang tot de Kubelet API maakt het mogelijk om die informatie openbaar te maken. \autocite{KubernetesDocs-2023}.
+Rechtstreekse toegang valt niet onder toelatingscontrole en er wordt geen logging gemaakt door Kubernetes audit logging. Een aanvaller met directe toegang tot deze API kan mogelijk controles omzeilen die bepaalde acties detecteren of voorkomen \autocite{KubernetesDocs-2023}.
 
+\paragraph{The etcd API}
+De etcd service wordt gebruikt als dataopslag voor Kubernetes. Onbevoegde toegang tot deze API maakt openbaring of aanpassing van een cluster \autocite{KubernetesDocs-2023}. Rechtstreekse toegang tot de etcd wordt niet gelogd door de audit.
+Een aanvaller met toegang tot de private sleutel van het etcd-clientcertificaat van de API-server of een vertrouwd clientcertificaat kan clusterbeheerdersrechten krijgen \autocite{KubernetesDocs-2023}.
+
+\paragraph{Container runtime socket}
+Toegang tot de runtime socker container maakt het mogelijk om nieuwe containers op te zetten of te inerageren met actieve containers. Indien gecompromitteerd, kan een aanvaller privileges escaleren, toegang krijgen tot geheimen en andere worker nodes of control plane componenten controleren \autocite{KubernetesDocs-2023}.
 
 \section{Tools en oplossingen}
 
@@ -133,31 +140,30 @@ Deze sectie bespreekt algemeen advies hoe de configuratie kan verbetert worden e
 
 Om beveiliging in te stellen op een pod kan dit met het veld \textit{securityContext} in de specificatie van de pod. \textit{securityContext} is een \textit{PodSecurityContext} object \autocite{KubernetesDocs-2023}. 
 Deze beveiligingsinstellingen gelden voor alle containers binnen de pod \autocite{KubernetesDocs-2023}. 
-Volgens \textcite{OWASP-2023} is een proces als root gebruiker draaien een vaak voorkomende fout. Voor sommige workloads is de root gebruiker een vereiste maar het is aangeraden om het te vermijden. Als de container met root rechten gecompromitteerd wordt dan zou de aanvaller root rechten hebben om schadelijke acties te kunnen uitvoeren \autocite{OWASP-2023}.  
+Volgens \textcite{OWASP-2023} is een proces als root gebruiker draaien een vaak voorkomende fout. Voor sommige workloads is de root gebruiker een vereiste maar het is aangeraden om het te vermijden. Als de container met root rechten gecompromitteerd wordt dan zou de aanvaller root rechten hebben om schadelijke acties te kunnen uitvoeren \autocite{OWASP-2023}.  \newline
 
-Een ander voorbeeld van \textcite{OWASP-2023} beschrijft dat het aangeraden is om read-only (alleen-lees) bestandssystemen te gebruiken. Alleen-lees bestandssystemen limiteren de impact van een gecompromitteerde container op een kubernetes node \autocite{OWASP-2023}. Dit zorgt ervoor dat een kwaadaardig proces het host systeem niet kan herschrijven of aanpassen.
-
-Volgens \textcite{OWASP-2023} is het aangeraden om containers zonder privileges te draaien. De container kan verdere middelen of capaciteiten krijgen als de container als privilege draait. 
+Een ander voorbeeld van \textcite{OWASP-2023} beschrijft dat het aangeraden is om read-only (alleen-lees) bestandssystemen te gebruiken. Alleen-lees bestandssystemen limiteren de impact van een gecompromitteerde container op een kubernetes node \autocite{OWASP-2023}. Dit zorgt ervoor dat een kwaadaardig proces het host systeem niet kan herschrijven of aanpassen. Volgens \textcite{OWASP-2023} is het aangeraden om containers zonder privileges te draaien. De container kan verdere middelen of capaciteiten krijgen als de container als privilege draait. \newline
 
 Deze drie voorbeelden kunnen allemaal vermeden worden in de configuratie van een pod. Dit is bij de sectie 'securitycontext'. 
-\begin{minted}{console}
-    apiVersion: v1  
-    kind: Pod  
-    metadata:  
+\begin{lstlisting}
+apiVersion: v1  
+kind: Pod  
+metadata:  
     name: root-priviliged-readOnly
-    spec:  
+spec:  
     containers:  
     ...
     securityContext:  
-    #Privileges staan aan 
-    privileged: true
-    #root gebruiker staat aan
-    runAsUser: 0
-    #De container runned als een gebruiker en niet als root
-    runAsUser: 5554
-    #alleen-lees rechten zijn geconfigureerd
-    readOnlyRootFilesystem: true
-\end{minted}
+        #Privileges staan aan 
+        privileged: true
+        #root gebruiker staat aan
+        runAsUser: 0
+        #De container runned als een gebruiker en niet als root
+        runAsUser: 5554
+        #alleen-lees rechten zijn geconfigureerd
+        readOnlyRootFilesystem: true
+\end{lstlisting}
+
 
 Het is ook mogelijk om dit als runtime te configureren en niet in de configuratie. De applicatie kan deze miconfiguratie mitigeren door volgende maatregelen te nemen \autocite{OWASP-2023}:
 \begin{itemize}
@@ -175,27 +181,27 @@ Kubectl maakt contact met de API server via REST calls. Bij zo een REST call naa
     \item Toegangscontrole
 \end{itemize}
 \paragraph{Transport beveiliging}
-Het is belangrijk dat de API server niet naar een poort luistert die kwetsbaar is zoals poort 8080. Volgens \autocite{KubernetesDocs-2023} is de standaard poort 6443. Om zeker te zijn is het mogelijk om te checken op welke poort de api server draait door het commando:
-\begin{minted}{console}
-    kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}'
-\end{minted}
+Het is belangrijk dat de API server niet naar een poort luistert die kwetsbaar is zoals poort 8080. Volgens \autocite{KubernetesDocs-2023} is de standaard poort 6443. Om zeker te zijn is het mogelijk om te checken op welke poort de API server draait door het commando:
+\begin{lstlisting}[language=tex, caption={Checken welke poort de API server draait}]
+kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}'
+\end{lstlisting}
 
 De API is veilig geconfigureerd als de URL eindigt met poort 443, 8443 of 6443. Het aangeraden om dit te veranderen naar poort 6443, 8443 of 443 als de poort geconfigureerd is op 8080. Dit is mogelijk met het commando:
-\begin{minted}{console}
-    kube-apiserver --secure-port <port>
-\end{minted}
+\begin{lstlisting}[language=tex, caption={Veranderen poort Kubernetes API}]
+kube-apiserver --secure-port <port>
+\end{lstlisting}
 
 Om bovenstaand commando uit te voeren is het nodig om kube-apiserver te installeren. 
 Bovenstaand commando zal de URL geven van de kubernetes API sever. Om te verifiëren dat de poort open is kan dat met een curl commando \autocite{Rice2018}:
-\begin{minted}{console}
-    curl <IP address>:<port>
-\end{minted}
+\begin{lstlisting}[language=tex, caption={verifiëren poort open}]
+curl <IP address>:<port>
+\end{lstlisting}
 
 Bij het maken van een API verzoek of REST call wordt er ook een certificaat gepresenteerd. Zo een certificaat kan ondertekent zijn door een certificate authority (CA) of een PKI (public key infrastructure) die connectie heeft met een gekende CA. Het certificaat en de private sleutel kunnen gewijzigd worden door gebruik te maken van volgende commando's \autocite{KubernetesDocs-2023}:
-\begin{minted}{console}
-    kube-apiserver --tsl-cert-file
-    kube-apiserver --tls-private-key-file
-\end{minted}
+\begin{lstlisting}[language=tex, caption={Wijzigen certificaat en private sleutel}]
+kube-apiserver --tsl-cert-file
+kube-apiserver --tls-private-key-file
+\end{lstlisting}
 
 \paragraph{Authenticatie}
 Eens dat er een veilige transport methode is toegepast kijkt de API naar authenticatie. Authenticatie kan plaatsvinden via clientcertificaten, wachtwoorden, tokens, serviceaccounts. Meerdere authenticatiemethoden kunnen worden ingesteld en geprobeerd.
@@ -208,11 +214,62 @@ Kubernetes maakt gebruik van meerdere authorisatiemethodes zoals ABAC, RBAC en W
 \paragraph{Toegangscontrole}
 Toegangscontrolemodules kunnen verzoeken wijzigen of weigeren. Toegangscontrolemodules zijn softwaremodules die verzoeken kunnen wijzigen of weigeren. Deze modules   handelen verzoeken af die objecten creëren, wijzigen, verwijderen of verbinden. 
 
+\subsubsection{Kubernetes API server}
+In de sectie \textit{kwetsbaarheden} worden 4 delen van de Kubernetes API server aangehaald met hun kwetsbaarheden. In deze sectie wordt er beschreven hoe deze kwetsbaarheden gemitigeerd kunnen worden.
 
-\subsubsection{RBAC}
+\paragraph{Statische pods}
+De oplossingen die \textcite{KubernetesDocs-2023} biedt zijn:
+\begin{itemize}
+    \item Gepaste permissies instellen voor toegang tot de configuratie file van Kubernetes \textit{/etc/kubernetes/kubelet.conf} 
+    \item Schakel de \textit{kubelet static pod manifest} functionaliteit alleen in als de node dit vereist: Bewerk het kubelet-configuratiebestand (bijvoorbeeld /etc/kubernetes/kubelet.conf) en stel \textit{staticPodPath} of \textit{staticPodURLs} in op basis van de vereisten.
+\end{itemize}
+
+\paragraph{De kubelet API}
+De oplossingen die \textcite{KubernetesDocs-2023} bied voor het mitigeren van de kwetsbaarheden in de kubelet API zijn:
+\begin{itemize}
+    \item Beperk de toegang tot subbronnen van het API object door middel van technieken zoals RBAC. Geef alleen toegang wanneer het nodig is.
+    \item Beperk de toegang tot de kubelet poort
+    \item Configureer kubelet authenticatie om webhook of certificaat modus te gebruiken: Bewerk het kubelet-configuratiebestand (bijv. /etc/kubernetes/kubelet.conf) en stel de authenticatiemodus in op webhook of certificaat op basis van de kubernetes opstelling
+    \item Schakel de niet-geauthenticeerde alleen-lezen Kubelet-poort op het cluster uit: Bewerk het kubelet-configuratiebestand (bijv. /etc/kubernetes/kubelet.conf) en stel readOnlyPort: 0 in om de alleen-lezen poort uit te schakelen.
+\end{itemize}
+
+\paragraph{etcd API}
+De oplossingen die \textcite{KubernetesDocs-2023} bied voor het mitigeren van de kwetsbaarheden in de etcd API zijn:
+\begin{itemize}
+    \item Zet de gepaste bestandspermissies voor de bestanden van de private sleutel aan de hand van volgend commando:
+\begin{lstlisting}[language=tex, caption={Opzetten gepaste bestandspermissies voor private sleutel}]
+chmod <permissions> <private_key_file>
+\end{lstlisting}
+    \item Zorg ervoor dat de certificaat autoriteit die vertrouwd is door de etcd alleen gebruikt word voor de authenticatie van die dienst. 
+    \item Beperk toegang tot de etcd poort via het netwerk
+\end{itemize}
+
+\paragraph{Container runtime socket}
+De oplossingen die \textcite{KubernetesDocs-2023} bied voor het mitigeren van de kwetsbaarheden in container runtime socket zijn:
+\begin{itemize}
+    \item Stel de juiste bestandsrechten in voor het container runtime socket bestand:
+\begin{lstlisting}[language=tex, caption={Opzetten juiste bestandsrechten voor container runtime socket}]
+chmod <permissions> <container_runtime_socket>
+\end{lstlisting}
+    \item Isoleer de kubelet van andere componenten die op het node draaien, met behulp van technieken als Linux kernel namespaces.
+    \item Beperk of verbied het gebruik van hostPath mounts die de container runtime socket bevatten.
+\end{itemize}
+
+\subsubsection{Beveiligingsstandaarden pod}
 
 
-\subsubsection{Tools of middelen}
+\subsubsection{Tools of middelen misconfiguratie}
+
+
+\subsection{RBAC}
+
+\subsubsection{Tools of middelen RBAC}
+
+
+\subsection{Supply Chain}
+
+\subsubsection{Tools of middelen Supply Chain}
+
 
 
 

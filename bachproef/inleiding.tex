@@ -5,7 +5,7 @@
 \chapter{\IfLanguageName{dutch}{Inleiding}{Introduction}}%
 \label{ch:inleiding}
 
-Kubernetes is een snel opkomende en krachtige opensourcesoftware voor het automatiseren en beheren van containers. Deze containers kunnen Docker of een andere technologie zijn. Om deze containers te laten communiceren en samenwerken, worden deze toegepast binnen een Kubernetes cluster. \autocite{KubernetesDocs-2023} Grote bedrijven zoals ING, Nokia, Huawei en adidas gebruiken kubernetes om hun applicaties en services efficiënt te beheren en schaalbaar te maken. Door de stijging van het gebruik van Kubernetes is het belangrijk dat de beveiliging optimaal blijft. De functies van Kubernetes blijven uitbreiden en oude functies worden geüpdatet. Daarom is het van belang om Kubernetes altijd te onderhouden op vlak van beveiliging. Bij elke wijziging of uitbreiding is er een kans dat nieuwe kwetsbaarheden opduiken. Hackers of mensen met slechte bedoelingen blijven technologieën en technieken uitvinden om kwetsbaarheden te ontdekken dus het is van belang om de veiligheid van het systeem te blijven updaten. Elke technologie heeft kwetsbaarheden. Het is geen garantie dat deze verdwijnen door een sterke beveiliging.
+Kubernetes is een snel opkomende en krachtige opensourcesoftware voor het automatiseren en beheren van containers. Deze containers kunnen Docker of een andere technologie zijn. Om deze containers te laten communiceren en samenwerken, worden deze toegepast binnen een Kubernetes cluster. \autocite{KubernetesDocs-2023} Grote bedrijven zoals ING, Nokia, Huawei en adidas gebruiken kubernetes om hun applicaties en services efficiënt te beheren en schaalbaar te maken. Door de stijging van het gebruik van Kubernetes is het belangrijk dat de beveiliging optimaal blijft. De functies van Kubernetes blijven uitbreiden en oude functies worden geüpdatet. Daarom is het van belang om Kubernetes altijd te onderhouden op vlak van beveiliging. Bij elke wijziging of uitbreiding is er een kans dat nieuwe kwetsbaarheden opduiken. Hackers of mensen met slechte bedoelingen blijven technologieën en technieken uitvinden om kwetsbaarheden te ontdekken dus het is van belang om de veiligheid van het systeem te blijven updaten. Dit onderzoek legt de nadruk op het verkennen van beveiligingsaspecten met betrekking tot Kubernetes, met een specifieke focus op de tools en hulpmiddelen die ermee samenhangen. Hoewel deze bachelorproef een belangrijke stap voorwaarts betekent op het gebied van beveiliging, is het belangrijk om op te merken dat niet alle aspecten volledig worden behandeld. \newline
 
 De scope van dit onderzoek omvat de belangrijkste zaken die te maken hebben met Docker containers te beveiligen binnen een Kubernetes cluster. De configuratie van de applicaties binnen deze containers zijn niet van toepassing in deze paper. In dit onderzoek worden tools zoals kubehunter, kube-bench en KubeLinter besproken voor het analyseren en het uitvoeren van beveiligings validaties. 
 
@@ -32,11 +32,7 @@ Securex, een sociaal zekerings bedrijf gevestigd in gent, maakt gebruik van een 
 \label{sec:onderzoeksvraag}
 
 \begin{itemize}
-    \item Wat is kubernetes? Waarin speelt kubernetes een belangrijker rol?
-    \item Wat zijn de kwetsbaarheden van kubernetes?
-    \item Wat zijn drie belangrijke tools of oplossingen tegen deze kwetsbaarheden? Waarin verschillen deze oplossingen of tools?
-    \item Zijn er tools beschikbaar die software kan scannen die geïnstalleerd word op kubernetes?
-    \item Zijn er tools of oplossingen beschikbaar om configuratie van kubernetes te valideren?
+    \item Hoe kunnen tools of oplossingen beschikbaar gesteld worden om zowel de geïnstalleerde software op Kubernetes te scannen als de configuratie van Kubernetes te valideren?
 \end{itemize}
 %Wees zo concreet mogelijk bij het formuleren van je onderzoeksvraag. Een onderzoeksvraag is trouwens iets waar nog niemand op dit moment een antwoord heeft (voor zover je kan nagaan). Het opzoeken van bestaande informatie (bv. ``welke tools bestaan er voor deze toepassing?'') is dus geen onderzoeksvraag. Je kan de onderzoeksvraag verder specifiëren in deelvragen. Bv.~als je onderzoek gaat over performantiemetingen, dan 
 

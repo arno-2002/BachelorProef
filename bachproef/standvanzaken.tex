@@ -131,7 +131,7 @@ De etcd service wordt gebruikt als dataopslag voor Kubernetes. Onbevoegde toegan
 Een aanvaller met toegang tot de private sleutel van het etcd-clientcertificaat van de API-server of een vertrouwd clientcertificaat kan clusterbeheerdersrechten krijgen \autocite{KubernetesDocs-2023}.
 
 \paragraph{Container runtime socket}
-Toegang tot de runtime socker container maakt het mogelijk om nieuwe containers op te zetten of te inerageren met actieve containers. Indien gecompromitteerd, kan een aanvaller privileges escaleren, toegang krijgen tot geheimen en andere worker nodes of control plane componenten controleren \autocite{KubernetesDocs-2023}.
+Toegang tot de runtime socker container maakt het mogelijk om nieuwe containers op te zetten of te interageren met actieve containers. Indien gecompromitteerd, kan een aanvaller privileges escaleren, toegang krijgen tot geheimen en andere worker nodes of control plane componenten controleren \autocite{KubernetesDocs-2023}.
 
 \section{Tools en oplossingen}
 
@@ -233,6 +233,8 @@ De oplossingen die \textcite{KubernetesDocs-2023} bied voor het mitigeren van de
     \item Schakel de niet-geauthenticeerde alleen-lezen Kubelet-poort op het cluster uit: Bewerk het kubelet-configuratiebestand (bijv. /etc/kubernetes/kubelet.conf) en stel readOnlyPort: 0 in om de alleen-lezen poort uit te schakelen.
 \end{itemize}
 
+Een oplossing die \textcite{OWASP-2023} biedt is om de optie \textit{--anonymous-auth} op false te zetten in de kubelet configuratie zodat er geen anonieme authenticatiemogelijkheden zijn tot de kubelet API.
+
 \paragraph{etcd API}
 De oplossingen die \textcite{KubernetesDocs-2023} bied voor het mitigeren van de kwetsbaarheden in de etcd API zijn:
 \begin{itemize}
@@ -259,13 +261,38 @@ chmod <permissions> <container_runtime_socket>
 \paragraph{Beleidsregels}
 \textcite{KubernetesDocs-2023} beschrijft 3 beleidsregels: geprivilegieerd, basislijn en beperkt. Deze beleidsregels zijn cumulatief en varieren van sterk toelaatbaar tot sterk beperkend. 
 
-\paragraph{geprivilegieerd}
+\paragraph{Geprivilegieerd}
+\textit{Het beleid van de privileges is met opzet open en volledig onbeperkt. \autocite{KubernetesDocs-2023}}.
+Deze beleidsregel is bestemd voor gebruikers die vertrouwd zijn voor het beheer van het syteem en de infrastructuur \autocite{KubernetesDocs-2023}. 
 
+\paragraph{Basislijn of Basisbeleid (Baseline)}
+\textit{Het basisbeleid is gericht op gebruiksgemak voor gewone gecontaineriseerde werklasten, terwijl bekende privilege-escalaties worden voorkomen. \autocite{KubernetesDocs-2023}}
+Deze beleidsregel is bestemd voor applicatiebeheerders en -ontwikkelaars van non-kritische applicaties.
+In de officiële documentatie van Kubernetes zijn de exacte controls en beleidsregels te vinden.
+
+\paragraph{Beperkt}
+\textit{Het beperkte beleid is gericht op het afdwingen van de huidige Pod hardening best practices, ten koste van enige compatibiliteit. \autocite{KubernetesDocs-2023}}
+Deze beleidsregel is gericht naar applicaties die beveiligingskritisch zijn en alleen vertrouwde gebruikers. 
+Dit beperkt beleid bevat dezelfde controles als het basisbeleid maar worden strikter toegepast.
 
 \subsubsection{Tools of middelen misconfiguratie}
 
 
 \subsection{RBAC}
+RBAC (Role-based access control) of rolgebaseerde toegangscontrole wordt gebruikt om toegang te controleren voor gebruikers en werklasten \autocite{nordell2022systematic}.
+Zo hebben gebruikers en werklasten alleen toegang tot de middelen die nodig zijn om hun rollen uit te voeren.
+
+\subsubsection{Best practices}
+\textcite{KubernetesDocs-2023} beschrijft een aantal generieke regels die van toepassing zijn bij RBAC in een kubernetes cluster:
+\begin{itemize}
+    \item Gebruik rechten op het niveau van namespace
+    \item Gebruik RoleBindings in de plaats van ClusterRoleBindings om gebruikers alleen rechten te geven binnen een specifieke namespace
+    \item Least-privilege rechten toekennen
+    \item Ontwijk wildcard permissies
+    \item limiteer het gebruik van 'cluster-admin' accounts
+\end{itemize}
+
+
 
 \subsubsection{Tools of middelen RBAC}
 
@@ -273,7 +300,6 @@ chmod <permissions> <container_runtime_socket>
 \subsection{Supply Chain}
 
 \subsubsection{Tools of middelen Supply Chain}
-
 
 
 

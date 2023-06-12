@@ -36,22 +36,22 @@ Binnen deze worker nodes zijn er pods met containers in. In deze containers kunn
 \autocite{KubernetesDocs-2023} Een control plane bestaat uit verschillende componenten zoals een Kube-apiserver, etcd, kube-scheduler en een kube-controller-manager. 
 De kube-apiserver is een belangrijk component van de control plane want deze is verantwoordelijk voor de communicatie van gebruikers, de cluster en externe componenten \autocite{hohn-2020}. 
 De kubernetes API laat toe om de staat van objecten zoals pods, namespaces te manipuleren \autocite{KubernetesDocs-2023}.
-De etcd binnen een control plane is een key value opslagplaats voor alle data van de cluster, het is belangrijk dat ten alle tijde deze data beschermd is van ongewilde manipulatie \autocite{KubernetesDocs-2023}. 
+De etcd binnen een control plane is een key value opslagplaats voor alle data van de cluster en het is belangrijk dat ten allen tijde deze data beschermd is van ongewilde manipulatie \autocite{KubernetesDocs-2023}. 
 Om voor fouttolerantie en hoge beschikbaarheid te zorgen, draait de control plane in productiescenario's meestal op vele machines, en een cluster bevat doorgaans meerdere nodes \autocite{KubernetesDocs-2023}. 
 In leer- of middelenbeperkte omgevingen is er meestal maar één node aanwezig.
 
 \subsubsection{pod}
-Een pod is een groep van één of meer containers \autocite{habbal-2020}.
-Alle containers in een pod delen hetzelfde IP adres en dezelfde middelen zoals volumes \autocite{hohn-2020}.
-In makkelijkere woorden is een pod een enkele instantie van een applicatie die kan worden gerepliceerd als er meer instanties nodig zijn om de toenemende druk op te vangen \autocite{habbal-2020}.
-Gerepliceerde pods worden gecreëerd en beheert als een groep door de middelen en de control plane \textcite{KubernetesDocs-2023}.
+Een pod omvat één of meer containerss \autocite{habbal-2020}.
+Alle containers in een pod gebruiken hetzelfde IP adres en dezelfde middelen zoals volumes \autocite{hohn-2020}.
+Eenvoudig gezegd is een pod een enkele uitvoering van een applicatie die kan worden vermenigvuldigd als er meer uitvoeringen nodig zijn om de stijgende belasting te verwerken \autocite{habbal-2020}.
+Gerepliceerde pods worden als een groep opgezet en beheerd door de middelen en de control plane \textcite{KubernetesDocs-2023}.
 
 \subsubsection{Service}
 \textit{Een service is een methode om een netwerktoepassing die als een of meer Pods in uw cluster draait, bloot te stellen \autocite{KubernetesDocs-2023}.}
 
 \subsubsection{Namespace}
 Een namespace dient om objecten te organiseren in een cluster.
-Een soort folder die objecten houd \autocite{burns-2022}.
+Een soort folder die objecten houdt \autocite{burns-2022}.
 
 \subsubsection{Kubelet}
 De kubelet is het belangrijkste component dat op elke node aanwezig is \autocite{Vayghan2019}.
@@ -59,6 +59,13 @@ Kubelet draait de Docker-containers die aan zijn node zijn toegewezen, voert reg
 
 \subsubsection{Volume}
 Een volume maakt het mogelijk om opslag te delen tussen de containers in een pod, of tussen pods op dezelfde node \autocite{Baier2017}.
+
+\subsubsection{PersistentVolume - PersistentVolumeClaim}
+\paragraph{PersistentVolume}
+Een PersistentVolume(PV) is een stuk opslagplaats in de cluster dat manueel voorzien is door de administrator. Het kan ook dynamisch voorzien zijn door Kubernetes door middel van een \textit{StorageClass} \autocite{KubernetesDocs-2023}.
+
+\paragraph{PersistentVolumeClaim}
+Een PersistenVolumeClaim (PVC) is een aanvraag voor opslag door een gebruiker dat vervolledigd kan worden door een PV. PersistentVolumes en PVCs zijn onafhankelijk van de levenscyclus van een pod en voorzien data door herstarten, herschikking (rescheduling) en zelf het verwijderen van pods \autocite{KubernetesDocs-2023}. 
 
 \subsubsection{ConfigMap}
 De ConfigMap binnen kubernetes is een soort volume en een middel voor het opslaan van configuratie data \autocite{KubernetesDocs-2023}.
@@ -79,9 +86,9 @@ Deze command-line tool maakt gebruik van de Kubernetes API \autocite{KubernetesD
 \section{Kwetsbaarheden}
 
 \subsection{Misconfiguratie}
-Een studie in 2023 van \textcite{red-hat-2023} toont aan dat 45 percent van DevOps ingenieurs een veiligheidsincident heeft ervaren die te maken heeft met de misconfiguratie van containers en/of clusters. Pods in een Kubernetes-cluster kunnen standaard met elkaar communiceren, door deze communicatie ontstaan er veiligheidslekken als het niet goed is geconfigureerd. De grootste bezorgdheid rond misconfiguratie is het blootstellen van gevoelige informatie \autocite{red-hat-2023}. Andere soorten veiligheids misconfiguraties dat de ingenieurs zich zorgen om maken zijn ongepatchte fouten, het behoud van de standaard configuratie, errors in de code en containers met foute rechten. \newline
+Een studie in 2023 van \textcite{red-hat-2023} toont aan dat 45 percent van DevOps ingenieurs een veiligheidsincident heeft ervaren die te maken heeft met de misconfiguratie van containers en/of clusters. De standaard configuratie is niet steeds comform aan een veilige situatie waardoor veiligheidslekken kunnen ontstaan. De grootste bezorgdheid rond misconfiguratie is het blootstellen van gevoelige informatie \autocite{red-hat-2023}. Andere soorten veiligheids misconfiguraties waar ingenieurs zich zorgen om maken zijn ongepatchte fouten, het behoud van de standaard configuratie, errors in de code en containers met foute rechten. \newline
 
-Vaak voorkomende misconfiguratie fouten kunnen tot grote problemen voor een applicatie zorgen. Namelijk 40 percent zijn het meest bezorgd dat er ransomware aanvallen gebeuren als kubernetes of de containers niet juist zijn geconfigureerd en 53 percent hebben al een ransomware aanval ervaren in de laatste 12 maanden \autocite{red-hat-2023}. De meest voorkomende aanval bij misconfiguraties is een Denial of service (DoS) attack \autocite{red-hat-2023}. Een DoS aanval heeft als doel het systeem onbruikbaar of ontoegankelijk te maken voor de gebruikers. \newline
+Vaak voorkomende misconfiguratie fouten kunnen tot grote problemen voor een applicatie zorgen. 40 percent van de ontwikkelaars zijn het meest bezorgd dat er ransomware aanvallen gebeuren als kubernetes of de containers niet juist zijn geconfigureerd en 53 percent hebben al een ransomware aanval ervaren in de laatste 12 maanden \autocite{red-hat-2023}. De meest voorkomende aanval bij misconfiguraties is een Denial of service (DoS) attack \autocite{red-hat-2023}. Een DoS aanval heeft als doel het systeem onbruikbaar of ontoegankelijk te maken voor de gebruikers. \newline
 
 Standaard configuratie binnen de kubernetes cluster kan leiden tot anonieme niet-geauthenticeerde gebruikers om kwaadaardige activiteiten uit te voeren. Een kwaadwillende gebruiker kan bijvoorbeeld de standaardinstellingen voor een onbeveiligde toegang achterhalen, toegang krijgen tot de control plane en schadelijke commando's uitvoeren \autocite{shamim2020xi}.
 
@@ -90,12 +97,12 @@ Via de kubectl command is het mogelijk om API requests naar de server te sturen 
 Standaard zal de API server luisteren naar poort 6443 \autocite{KubernetesDocs-2023}. Iedereen die toegang krijgt tot het systeem waar de master op draait, heeft volledige toegang tot de cluster \autocite{Rice2018}. \newline
 
 \subsection{RBAC}
-RBAC (Rolgebaseerde toegangscontrole) is het concept dat machtigingen worden geassocieerd met rollen, en dat gebruikers lid worden van de juiste rollen, waardoor zij de machtigingen van de rollen verkrijgen \autocite{Sandhu1998}. Doordat misconfiguraties niet vanaf een centrale locatie kunnen worden gedetecteerd, hersteld en voorkomen, kunnen clusters worden gecompromitteerd \autocite{OWASP-2023}. Volgens de top 10 Kubernetes risico's van OWASP in 2022 is RBAC de derde meest gevaarlijke risico. RBAC is de primaire authorisatie methode voor Kubernetes en is verantwoordelijk van de permissies over de middelen en componenten \autocite{OWASP-2023}. Er bestaat een 'superuser' binnen kubernetes genaamd cluster-admin. Deze cluster-admin heeft toegang om elke actie uit te voeren op elke component binnen een Kubernetes cluster \autocite{OWASP-2023}. 
+RBAC (Rolgebaseerde toegangscontrole) is het concept dat machtigingen worden geassocieerd met rollen en dat gebruikers lid worden van de juiste rollen, waardoor zij de machtigingen van de rollen verkrijgen \autocite{Sandhu1998}. Doordat misconfiguraties niet vanaf een centrale locatie kunnen worden gedetecteerd, hersteld en voorkomen, kunnen clusters worden gecompromitteerd \autocite{OWASP-2023}. Volgens de top 10 Kubernetes risico's van OWASP in 2022 is RBAC de derde meest gevaarlijke risico. RBAC is de primaire authorisatie methode voor Kubernetes en is verantwoordelijk van de permissies over de middelen en componenten \autocite{OWASP-2023}. Er bestaat een 'superuser' binnen kubernetes genaamd cluster-admin. Deze cluster-admin heeft toegang om elke actie uit te voeren op elke component binnen een Kubernetes cluster \autocite{OWASP-2023}. 
 
 RBAC wordt gebruikt om elk verzoek dat binnenkomt op de API-server goed te keuren of te weigeren \autocite{mytilinakis2020attack}. Als een gebruiker een API request maakt naar het eindpunt zonder enige authenticatie dan is hij geassocieerd met als een anonieme gebruiker \autocite{mytilinakis2020attack}. Het mogelijk maken van anonieme toegang naar eindpunten kan ook de waarschijnlijkheid van het vrijgeven van gevoelige informatie verhogen \autocite{Rice2018}. Het is onwaarschijnlijk dat deze informatie iets belangrijks in gevaar brengt, maar het kan de aanvaller de weg wijzen naar andere zwakheden \autocite{Rice2018}.
 
 \subsection{Software Supply chain}
-35 percent van de respondenten in de studie van \textcite{red-hat-2023} zijn het meest bezorgd over kwetsbaarheden in de software gerelateerd aan de software supply chain. Een software supply chain is de verzameling van de componenten, softwares, tools die gebruikt worden om een applicatie te bouwen. Hierbij komen open-source softwares aanbod en het gebruik hiervan creëren uitdagingen in de beveiliging van de applicatie \autocite{red-hat-2023}. Kwetsbaarheden in software kunnen leiden tot grote beveiligingsproblemen, zoals datalekken, malware-infecties en onbevoegde toegang \autocite{shamim2020xi}. De bedrijven van de correspondenten zijn het meest bezorgd in kwetsbare componenten van een applicatie, onvoldoende toegang controle en een tekort aan Software Bill of Materials (SBOM) of herkomst \autocite{red-hat-2023}. Deze studie toont ook aan dat bijna 70 percent van de correspondenten al problemen hebben gehad met een kwetsbare CI/CD pipeline en kwetsbare componenten in de applicatie. \newline
+35 percent van de respondenten in de studie van \textcite{red-hat-2023} zijn het meest bezorgd over kwetsbaarheden in de software gerelateerd aan de software supply chain. Een software supply chain is de verzameling van de componenten, softwares, tools die gebruikt worden om een applicatie te bouwen. Hierbij komen open-source softwares aanbod en het gebruik hiervan creëren uitdagingen in de beveiliging van de applicatie \autocite{red-hat-2023}. Kwetsbaarheden in software kunnen leiden tot grote beveiligingsproblemen, zoals datalekken, malware-infecties en onbevoegde toegang \autocite{shamim2020xi}. De bedrijven van de correspondenten zijn het meest bezorgd in kwetsbare componenten van een applicatie, onvoldoende toegang controle en een tekort aan Software Bill of Materials (SBOM) of herkomst \autocite{red-hat-2023}. De studie toont ook aan dat bijna 70 percent van de correspondenten al problemen hebben gehad met een kwetsbare CI/CD pipeline en kwetsbare componenten in de applicatie. \newline
 
 Containers en docker images horen ook tot software supply chain. Containers kunnen kwetsbaarheden en schadelijke software bevatten. Als er zwakheden in een Kubernetes-cluster zitten, wordt het hele container-orkestratiesysteem, evenals de meegeleverde apps, kwetsbaar voor aanvallen \autocite{shamim2020xi}. Als de images en deployment-configuraties van Kubernetes-componenten niet worden gecontroleerd, kan het Kubernetes-cluster vatbaar worden voor onbevoegde gebruikers. Wanneer deze images worden uitgerold, kunnen aanvallers toegang krijgen en gebruikmaken van zwakke plekken \autocite{shamim2020xi}. \newline
 
@@ -103,20 +110,19 @@ Volgens \textcite{OWASP-2023} zijn er drie belangrijke termen binnen de kwetsbaa
 \begin{itemize}
     \item Image Integrity: Dit verwijst naar de zekerheid van een container image. De zekerheid dat de image is wat het beweert te zijn, dat het geen kwaadaardige code bevat en dat het in geen enkele wijze aangepast is \autocite{OWASP-2023}. 
     \item Image Composition: Een container image is opgemaakt uit verschillende lagen. Elke laag representeert bepaalde veiligheidsimplicaties. Container images met onbelangrijke software kunnen gebruikt worden om privileges te verhogen of kwetsbaarheden uit te buiten \autocite{OWASP-2023}. 
-    \item Bekende software kwetsbaarheden: Vele container images gebruiken paketten van derde partijen die kwetsbaarheden kunnen bevatten die uitgebuit kunnen worden. Als docker images kwetsbare versies van software bevatten kan dit de kubernetes cluster in gevaar brengen \autocite{OWASP-2023}. 
+    \item  Bekende softwarekwetsbaarheden: Veel container images maken gebruik van pakketten van derden die kwetsbaarheden kunnen bevatten die misbruikt kunnen worden. Als docker images kwetsbare softwareversies bevatten, kan dit de kubernetes cluster bedreigen \autocite{OWASP-2023}. 
 \end{itemize}
 
 
 \subsection{Container runtime}
-In het onderzoek van \textcite{red-hat-2023} toont aan dat 49 percent van de gerelateerde veiligheidsincidenten in kubernetes of containers gebeuren via beveiligingsincidenten tijdens runtime. De container runtime is een van de meest kritische componenten in een kubernetes cluster \autocite{mytilinakis2020attack}. De container runtime dat in dit onderzoek wordt gebruikt is Docker, de meest voorkomende. Docker heeft zelf veiligheidsinstellingen en functies. Kwetsbaarheden in containers kunnen leiden tot het in gevaar brengen van andere componenten. 
+In het onderzoek van \textcite{red-hat-2023} wordt aangetoond dat 49 percent van de gerelateerde veiligheidsincidenten in kubernetes of containers gebeuren via beveiligingsincidenten tijdens runtime. De container runtime is een van de meest kritische componenten in een kubernetes cluster \autocite{mytilinakis2020attack}. De container runtime dat in dit onderzoek wordt gebruikt is Docker, de meest voorkomende. Docker heeft zelf veiligheidsinstellingen en functies. Kwetsbaarheden in containers kunnen leiden tot het in gevaar brengen van andere componenten. 
 
 \subsection{Images}
 In de sectie van \textit{Software supply chain} wordt er al een klein stukje besproken over images. Images worden meestal uit een publieke plaats gedownload. Het is dus mogelijk dat deze docker images niet altijd de juiste intenties hebben en mogelijks kwade bedoelingen hebben en kwetsbaarheden veroorzaken \autocite{mytilinakis2020attack}. 
 
 \subsection{Kubernetes API server}
 \paragraph{Statische pods}
-Volgens \textcite{KubernetesDocs-2023} is er een risico bij statische pods waarbij aanvallers statische pods kunnen wijzigen of nieuwe statische pods kunnen toevoegen waardoor API-serverconroles worden omzeild. 
-Dit risco kan worden veroorzaakt door foute schrijfrechten toe te kennen tot de locatie waar statische pods zijn opgeslagen.
+Volgens \textcite{KubernetesDocs-2023} bestaat er een risico bij statische pods: aanvallers kunnen statische pods veranderen of nieuwe statische pods toevoegen en daarmee API-servercontroles ontduiken. Dat risico kan het gevolg zijn van onjuiste schrijfrechten voor de locatie waar statische pods zijn opgeslagen.
 
 \paragraph{Kubelet API}
 De kubelet API biedt een HTTP API dat informatie vrijgeeft over de draaiende pods, pod logs en staat het uitvoeren van commando's in containers toe.
@@ -130,10 +136,10 @@ Een aanvaller met toegang tot de private sleutel van het etcd-clientcertificaat 
 \paragraph{Container runtime socket}
 Toegang tot de runtime socker container maakt het mogelijk om nieuwe containers op te zetten of te interageren met actieve containers. Indien gecompromitteerd, kan een aanvaller privileges escaleren, toegang krijgen tot geheimen en andere worker nodes of control plane componenten controleren \autocite{KubernetesDocs-2023}.
 
-\section{Tools en oplossingen}
+\section{Oplossingen - Best practises}
 
 \subsection{misconfiguratie}
-Deze sectie bespreekt algemeen advies hoe de configuratie kan verbetert worden en bespreekt ook verschillende tools voor het verifiëren van de configuratie.\newline
+Deze sectie bespreekt algemeen advies hoe de configuratie kan verbetert worden.\newline
 
 Om beveiliging in te stellen op een pod kan dit met het veld \textit{securityContext} in de specificatie van de pod. \textit{securityContext} is een \textit{PodSecurityContext} object \autocite{KubernetesDocs-2023}. 
 Deze beveiligingsinstellingen gelden voor alle containers binnen de pod \autocite{KubernetesDocs-2023}. 
@@ -162,7 +168,7 @@ spec:
 \end{lstlisting}
 
 
-Het is ook mogelijk om dit als runtime te configureren en niet in de configuratie. De applicatie kan deze miconfiguratie mitigeren door volgende maatregelen te nemen \autocite{OWASP-2023}:
+Het is ook mogelijk om dit als runtime te configureren en niet in de configuratie. De applicatie kan deze misconfiguratie mitigeren door volgende maatregelen te nemen \autocite{OWASP-2023}:
 \begin{itemize}
     \item Draai als niet-root gebruiker: Standaard draaien containers in Kubernetes als de root-gebruiker, die onbeperkte toegang heeft tot het systeem. Het draaien van containers als een niet-rootgebruiker kan de impact van potentiële beveiligingskwetsbaarheden helpen beperken door het niveau van toegang dat de container heeft tot het onderliggende systeem te verlagen \autocite{OWASP-2023}.
     \item Uitvoeren als niet-privilege modus: Standaard hebben containers in Kubernetes geprivilegieerde toegang tot het hostsysteem, wat betekent dat ze acties kunnen uitvoeren die de beveiliging van het systeem in gevaar kunnen brengen. Het draaien van containers in niet-privilege modus kan dit helpen voorkomen door de acties die de container kan uitvoeren te beperken \autocite{OWASP-2023}.
@@ -183,7 +189,7 @@ Het is belangrijk dat de API server niet naar een poort luistert die kwetsbaar i
 kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}'
 \end{lstlisting}
 
-De API is veilig geconfigureerd als de URL eindigt met poort 443, 8443 of 6443. Het aangeraden om dit te veranderen naar poort 6443, 8443 of 443 als de poort geconfigureerd is op 8080. Dit is mogelijk met het commando:
+De API is veilig geconfigureerd als de URL eindigt met poort 443, 8443 of 6443. Het wordt aangeraden om dit te veranderen naar poort 6443, 8443 of 443 als de poort geconfigureerd is op 8080. Dit is mogelijk met het commando:
 \begin{lstlisting}[language=tex, caption={Veranderen poort Kubernetes API}]
 kube-apiserver --secure-port <port>
 \end{lstlisting}
@@ -194,7 +200,7 @@ Bovenstaand commando zal de URL geven van de kubernetes API sever. Om te verifi�
 curl <IP address>:<port>
 \end{lstlisting}
 
-Bij het maken van een API verzoek of REST call wordt er ook een certificaat gepresenteerd. Zo een certificaat kan ondertekent zijn door een certificate authority (CA) of een PKI (public key infrastructure) die connectie heeft met een gekende CA. Het certificaat en de private sleutel kunnen gewijzigd worden door gebruik te maken van volgende commando's \autocite{KubernetesDocs-2023}:
+Bij het maken van een API verzoek of REST call wordt er ook een certificaat gepresenteerd. Zo een certificaat kan ondertekend zijn door een certificate authority (CA) of een PKI (public key infrastructure) die connectie heeft met een gekende CA. Het certificaat en de private sleutel kunnen gewijzigd worden door gebruik te maken van volgende commando's \autocite{KubernetesDocs-2023}:
 \begin{lstlisting}[language=tex, caption={Wijzigen certificaat en private sleutel}]
 kube-apiserver --tsl-cert-file
 kube-apiserver --tls-private-key-file
@@ -212,7 +218,7 @@ Kubernetes maakt gebruik van meerdere authorisatiemethodes zoals ABAC, RBAC en W
 Toegangscontrolemodules kunnen verzoeken wijzigen of weigeren. Toegangscontrolemodules zijn softwaremodules die verzoeken kunnen wijzigen of weigeren. Deze modules   handelen verzoeken af die objecten creëren, wijzigen, verwijderen of verbinden. 
 
 \subsubsection{Kubernetes API server}
-In de sectie \textit{kwetsbaarheden} worden 4 delen van de Kubernetes API server aangehaald met hun kwetsbaarheden. In deze sectie wordt er beschreven hoe deze kwetsbaarheden gemitigeerd kunnen worden.
+In de sectie \textit{kwetsbaarheden} worden vier delen van de Kubernetes API server behandeld met hun kwetsbaarheden. In deze sectie wordt er toegelicht hoe kwetsbaarheden vermeden kunnen worden.
 
 \paragraph{Statische pods}
 De oplossingen die \textcite{KubernetesDocs-2023} biedt zijn:
@@ -222,29 +228,30 @@ De oplossingen die \textcite{KubernetesDocs-2023} biedt zijn:
 \end{itemize}
 
 \paragraph{De kubelet API}
-De oplossingen die \textcite{KubernetesDocs-2023} bied voor het mitigeren van de kwetsbaarheden in de kubelet API zijn:
+De oplossingen die \textcite{KubernetesDocs-2023} 
+ voor het mitigeren van de kwetsbaarheden in de kubelet API zijn:
 \begin{itemize}
     \item Beperk de toegang tot subbronnen van het API object door middel van technieken zoals RBAC. Geef alleen toegang wanneer het nodig is.
-    \item Beperk de toegang tot de kubelet poort
-    \item Configureer kubelet authenticatie om webhook of certificaat modus te gebruiken: Bewerk het kubelet-configuratiebestand (bijv. /etc/kubernetes/kubelet.conf) en stel de authenticatiemodus in op webhook of certificaat op basis van de kubernetes opstelling
+    \item Beperk de toegang tot de kubelet poort.
+    \item Configureer kubelet authenticatie om webhook of certificaat modus te gebruiken: Bewerk het kubelet-configuratiebestand (bijv. /etc/kubernetes/kubelet.conf) en stel de authenticatiemodus in op webhook of certificaat op basis van de kubernetes opstelling.
     \item Schakel de niet-geauthenticeerde alleen-lezen Kubelet-poort op het cluster uit: Bewerk het kubelet-configuratiebestand (bijv. /etc/kubernetes/kubelet.conf) en stel readOnlyPort: 0 in om de alleen-lezen poort uit te schakelen.
 \end{itemize}
 
 Een oplossing die \textcite{OWASP-2023} biedt is om de optie \textit{--anonymous-auth} op false te zetten in de kubelet configuratie zodat er geen anonieme authenticatiemogelijkheden zijn tot de kubelet API.
 
 \paragraph{etcd API}
-De oplossingen die \textcite{KubernetesDocs-2023} bied voor het mitigeren van de kwetsbaarheden in de etcd API zijn:
+De oplossingen die \textcite{KubernetesDocs-2023} biedt voor het mitigeren van de kwetsbaarheden in de etcd API zijn:
 \begin{itemize}
     \item Zet de gepaste bestandspermissies voor de bestanden van de private sleutel aan de hand van volgend commando:
 \begin{lstlisting}[language=tex, caption={Opzetten gepaste bestandspermissies voor private sleutel}]
 chmod <permissions> <private_key_file>
 \end{lstlisting}
-    \item Zorg ervoor dat de certificaat autoriteit die vertrouwd is door de etcd alleen gebruikt word voor de authenticatie van die dienst. 
-    \item Beperk toegang tot de etcd poort via het netwerk
+    \item Zorg ervoor dat de certificaat autoriteit die vertrouwd is door de etcd alleen gebruikt wordt voor de authenticatie van die dienst. 
+    \item Beperk toegang tot de etcd poort via het netwerk.
 \end{itemize}
 
 \paragraph{Container runtime socket}
-De oplossingen die \textcite{KubernetesDocs-2023} bied voor het mitigeren van de kwetsbaarheden in container runtime socket zijn:
+De oplossingen die \textcite{KubernetesDocs-2023} biedt voor het mitigeren van de kwetsbaarheden in container runtime socket zijn:
 \begin{itemize}
     \item Stel de juiste bestandsrechten in voor het container runtime socket bestand:
 \begin{lstlisting}[language=tex, caption={Opzetten juiste bestandsrechten voor container runtime socket}]
@@ -260,7 +267,7 @@ chmod <permissions> <container_runtime_socket>
 
 \paragraph{Geprivilegieerd}
 \textit{Het beleid van de privileges is met opzet open en volledig onbeperkt. \autocite{KubernetesDocs-2023}}.
-Deze beleidsregel is bestemd voor gebruikers die vertrouwd zijn voor het beheer van het syteem en de infrastructuur \autocite{KubernetesDocs-2023}. 
+Deze beleidsregel is bestemd voor gebruikers die vertrouwd zijn voor het beheer van het systeem en de infrastructuur \autocite{KubernetesDocs-2023}. 
 
 \paragraph{Basislijn of Basisbeleid (Baseline)}
 \textit{Het basisbeleid is gericht op gebruiksgemak voor gewone gecontaineriseerde werklasten, terwijl bekende privilege-escalaties worden voorkomen. \autocite{KubernetesDocs-2023}}
@@ -269,11 +276,8 @@ In de officiële documentatie van Kubernetes zijn de exacte controls en beleidsr
 
 \paragraph{Beperkt}
 \textit{Het beperkte beleid is gericht op het afdwingen van de huidige Pod hardening best practices, ten koste van enige compatibiliteit. \autocite{KubernetesDocs-2023}}
-Deze beleidsregel is gericht naar applicaties die beveiligingskritisch zijn en alleen vertrouwde gebruikers. 
+Deze beleidsregel is gericht op applicaties die beveiligings kritisch zijn en alleen vertrouwde gebruikers. 
 Dit beperkt beleid bevat dezelfde controles als het basisbeleid maar worden strikter toegepast.
-
-\subsubsection{Tools of middelen misconfiguratie}
-
 
 \subsection{RBAC}
 RBAC (Role-based access control) of rolgebaseerde toegangscontrole wordt gebruikt om toegang te controleren voor gebruikers en werklasten \autocite{nordell2022systematic}.
@@ -290,13 +294,10 @@ Zo hebben gebruikers en werklasten alleen toegang tot de middelen die nodig zijn
     \item Zet een gecentraliseerd beleid in om riskante RBAC-machtigingen op te sporen en te blokkeren
 \end{itemize}
 
-Het belangrijkste beveiligingsprobleem binnen RBAC is het ongeautoriseerde gebruik van tokens  \autocite{nordell2022systematic}.  \textcite{KubernetesDocs-2023} raadt aan om de distributie van tokens te minimaliseren en het aantal nodes die krachtige pods draaien te limiteren. Als er zich krachtige pods plaatsvinden in de cluster is het belangrijk dat deze niet naast andere krachtige pods begeven. 
-
-\subsubsection{Tools of middelen RBAC}
-
+Het is correct dat het ongeautoriseerde gebruik van tokens het belangrijkste beveiligingsprobleem is binnen RBAC \autocite{nordell2022systematic}. Het minimaliseren van de distributie van tokens en het limiteren van het aantal nodes die krachtige pods draaien zijn aanbevolen maatregelen om dit probleem te voorkomen \autocite{KubernetesDocs-2023}. Als er zich krachtige pods plaatsvinden in de cluster is het belangrijk dat deze niet naast andere krachtige pods begeven. 
 
 \subsection{Software Supply Chain}
-De studie van \textcite{ellison2010evaluating} beschrijft dat het reduceren van de aanvalsoppervlak (of attack surface) helpt bij het beveiligen van de supply chain. Een systeem met een groter aantal te exploiteren componenten heeft een groter aanvalsoppervlak en loopt een groter risico op gevaar voor exploitatie \autocite{ellison2010evaluating}. Vermijd daardoor onnodige software. Enkele methoden die \textcite{ellison2010evaluating} geeft voor het beheren van de risico's in software supply chain zijn:
+De studie van \textcite{ellison2010evaluating} beschrijft dat het reduceren van de aanvalsoppervlak (of attack surface) helpt bij het beveiligen van de supply chain. Een systeem met een groter aantal te exploiteren componenten heeft een groter aanvalsoppervlak en loopt een groter risico op gevaar voor exploitatie \autocite{ellison2010evaluating}. Vermijd om die reden onnodige software. Enkele methoden die \textcite{ellison2010evaluating} geeft voor het beheren van de risico's in software supply chain zijn:
 \begin{itemize}
     \item Hou een inventaris bij van alle software van derden en welke contributie die software heeft
     \item De systeembeheerder en het ontwikkelingspersoneel van de site moeten wijzigingen in het aanvalsoppervlak documenteren en meedelen indien momenteel ongebruikte functies later worden ingeschakeld
@@ -308,7 +309,7 @@ Hier zijn enkele methoden die \textcite{OWASP-2023} beschrijft voor het mitigere
     \item Image integriteit: Optimaliseer de CI/CD pipeline met checks die gebeuren. De integriteit van de software valideren bij elke fase door gebruik van tools.
     \item Software Bill of Materials (SBOM): SBOM is een lijst van alle software pakketten, licenties en bibliotheken die een bepaalde software bevat.
     \item Image Ondertekenen: Gebruik cryptografische sleutelparen om het artefact of de software bij elke stap van de supply chain te ondertekenen en te verifiëren, zodat manipulatie van de artefacten zelf kan worden opgespoord.
-    \item Image opbouw: Overweeg om alternatieve basis images te gebruiken om niet alleen de beveiliging te verbeteren, maar ook de ruis die door kwetsbaarheidsscanners wordt gegenereerd te verminderen. Het gebruik van distroloze images vermindert ook de image-grootte, wat uiteindelijk helpt bij een snellere CI/CD build. Het is ook belangrijk ervoor te zorgen dat de basisimages up-to-date zijn met de laatste beveiligingspatches. 
+    \item Image opbouw: Overweeg om alternatieve basis images te gebruiken om niet alleen de beveiliging te verbeteren, maar ook de ruis die door kwetsbaarheidsscanners wordt gegenereerd te verminderen. Het gebruik van distroloze images vermindert de image-grootte, wat uiteindelijk helpt bij een snellere CI/CD build. Distroloze images zijn images die alleen de toepassing en de runtime-afhankelijkheden bevatten. Deze images bevatten geen pakketbeheerders, shells of andere programma's die verwacht worden in een standaard Linux-distributie. Het is ook belangrijk ervoor te zorgen dat de basisimages up-to-date zijn met de laatste beveiligingspatches. 
     \item Bekende softwarekwetsbaarheden: Het scannen van kwetsbaarheden in images moet worden gebruikt als eerste beschermingsmaatregel.
     \item Beleid handhaven: Voorkom dat niet-goedgekeurde images worden gebruikt met de Kubernetes toelatingscontroles en tools voor beleid zoals Open Policy Agent en Kyverno om workload images af te wijzen die:
     \begin{itemize}
@@ -320,8 +321,46 @@ Hier zijn enkele methoden die \textcite{OWASP-2023} beschrijft voor het mitigere
 \end{itemize}
 
 
-\subsubsection{Tools of middelen Supply Chain}
+\section{Tools}
 
+In deze sectie worden verschillende tools besproken om kwetsbaarheden te ontdekken in de misconfiguratie, software supply chain en RBAC. Deze tools kunnen helpen bij het toepassen van de oplossingen die in de vorige sectie zijn beschreven.
+
+\subsection{Kube-bench}
+Volgens \textcite{mytilinakis2020attack} is Kube-bench een aanbevolen tool die misconfiguraties en toegangspunten detecteert waarvan een aanvaller kan profiteren. Het onderzoek van \textcite{red-hat-2023} beschrijft dat 29 percent van de respondenten Kube-bench gebruikt als middel om de beveiliging van Kubernetes te optimaliseren. 
+
+
+\textit{kube-bench is een tool die controleert of Kubernetes veilig is ingezet door de controles uit te voeren die zijn gedocumenteerd in de CIS Kubernetes Benchmark. \autocite{aquasecurity-kube-bench-2023}}. De CIS benchmarks zijn voorgeschreven configuratie aanbevelingen \autocite{CIS-benchmark-2023}. Het Center for Internet Security, Inc. (CIS) is een door de gemeenschap gestuurde non-profitorganisatie die verantwoordelijk is voor de wereldwijd erkende beste praktijken op het gebied van IT-systeem- en gegevensbeveiliging, bekend als de CIS Controls en CIS Benchmarks \autocite{CIS-benchmark-2023}. In de top 10 Kubernetes risico's van \textcite{OWASP-2023} wordt er ook aangeraden om de CIS benchmark te volgen voor een optimale Kubernetes configuratie. Kube-bench wordt verder besproken in het hoofdstuk \ref{ch:Proof-of-concept} met enkele voorbeelden.
+    
+\subsection{KubeLinter}
+\textit{KubeLinter analyseert Kubernetes YAML-bestanden en Helm-diagrammen en controleert deze aan de hand van verschillende best practices, met een focus op productiegereedheid en beveiliging \autocite{KubeLinterDocs}}. De studie van \textcite{red-hat-2023} wijst aan dat KubeLinter door 37 percent van de respondenten gebruikt wordt om YAML-bestanden en Helm-diagrammen te scannen. Voor het ontplooien van Kubernetes applicaties of configuratie is het mogelijk om KubeLinter te gebruiken om de configuratie te verifiëren dat er geen bugs, errors of andere fouten in de configuratie voorkomen die kwetsbaarheden veroorzaken \autocite{KubeLinterDocs}. Enkele veel voorkomende problemen die KubeLinter identificeert zijn het draaien van containers als een niet-root gebruiker, het afdwingen van least privilege, en het opslaan van gevoelige informatie alleen in secrets \autocite{KubeLinterDocs}. 
+
+
+Het is mogelijk om de configuratie van KubeLinter aan te passen en specifieke checks in of uit te schakelen, of zelfs nieuwe checks te maken. Wanneer een check faalt dan geeft KubeLinter aanbevelingen om deze checks op te lossen \autocite{KubeLinterDocs}. 
+
+\subsection{Open Policy Agent - OPA}
+\textit{In Kubernetes dwingen toegangscontroleurs beleid af op objecten tijdens het maken, bijwerken en verwijderen. Toelatingscontrole is fundamenteel voor de handhaving van het beleid in Kubernetes \autocite{OPAdocs-2023}.} 
+Voorbeelden die mogelijk zijn als OPA als toegangscontrole gebruikt wordt:
+\begin{itemize}
+    \item Vereisen specifieke labels op alle middelen.
+    \item Vereisen dat container images afkomstig zijn van het corporate image register.
+    \item Vereisen dat alle Pods resource-aanvragen en -limieten specificeren.
+    \item Voorkomen dat tegenstrijdige Ingress-objecten worden aangemaakt.
+\end{itemize}
+
+\paragraph{OPA Gatekeeper}
+OPA Gatekeeper werkt als een Kubernetes-toelatingscontroller om beleidsregels die zijn geschreven in Rego toe te passen bij implementatie. OPA Gatekeeper kan de inheemse Kubernetes PodSecurity-toelatingscontroller aanvullen met complexere toelatingsbeleidsregels \autocite{RedHat-SupplyChainSec-2022}. 
+
+%\subsection{Clair}
+%Clair is een tool om de veiligheid van containers te controleren door middel van de statische analyse van kwetsbaarheden in appc- en docker-containers \autocite{RedHat-Clair-2019}. Clair scant elke containerlaag en geeft een melding van kwetsbaarheden die een bedreiging kunnen vormen, op basis van de Common Vulnerabilities and Exposures database (CVE) en soortgelijke databases van Red Hat, Ubuntu en Debian \autocite{RedHat-Clair-2019}. Deze tool helpt bij het herkennen van gekende kwetsbaarheden in de software supply chain of CI/CD pipeline.
+
+\subsection{trivy}
+Trivy is een flexibele en grondige beveiligingsscanner die kan worden gebruikt om kwetsbaarheden te identificeren in verschillende doelen zoals container images, bestandssystemen, Git repositories, virtuele machine images, Kubernetes en AWS. Het maakt gebruik van scanners om beveiligingsproblemen te detecteren zoals besturingssysteempakketten, softwareafhankelijkheden, bekende kwetsbaarheden (CVE's), infrastructure-as-code (IaC) misconfiguraties, gevoelige informatie en softwarelicenties \autocite{Trivy-2023}. De scanning en de mogelijkheden van Trivy zijn aan het uitbreiden. In Trivy v0.28 is het mogelijk om een kubernetes cluster te scannen, maar dit is nog experimenteel. Trivy helpt bij de verschillende kwetsbaarheden in de software supply chain en misconfiguratie. 
+
+%\subsection{Cosign}
+%Cosign is een tool dat aangeraden word door \textcite{OWASP-2023} voor de beveiliging van software supply chain. Het kan software artefacten signeren en verifiëren zoals container images \autocite{Sigstore-2023}. 
+ 
+\subsection{Kube-hunter}
+kube-hunter zoekt naar zwakke plekken in de beveiliging van Kubernetes-clusters. Het is ontworpen om het bewustzijn en de zichtbaarheid te vergroten van beveiligingsproblemen in Kubernetes omgevingen. \autocite{kube-hunter-2022}
 
 
 

@@ -7,13 +7,185 @@
 
 \section{inleiding}
 
-In dit hoofdstuk worden bepaalde technieken, tools of oplossingen, beschreven in de literatuurstudie, die helpen bij het implementeren van de beveiliging van een kubernetes toegepast met behulp van minikube en kubernetes goat.
+In dit hoofdstuk  worden bepaalde technieken, tools of oplossingen die in de literatuurstudie zijn beschreven uitgelicht. Ze helpen bij het implementeren van de beveiliging van een kubernetes met behulp van minikube als omgeving.
 
-\subsection{Minikube}
-Minikube is een hulpmiddel dat het toelaat om Kubernetes lokaal te draaien. Minikube draait een all-in-one of een multi-node lokale kubernetes cluster op een persoonlijke computer waar Windows, macOS of linux als besturingssysteem \autocite{KubernetesDocs-2023}. Als proof-of-concept wordt er een minikube opgestart op een Linux machine met Docker als driver. In deze Kubernetes cluster wordt er een voorbeeldapplicatie gemaakt om de gevonden tools en oplossingen in uit te werken. 
+\subsection{Ontplooien Kubernetes cluster}
+\subsubsection{minikube}
+Minikube is een hulpmiddel dat het toelaat om Kubernetes lokaal te draaien. Minikube draait een all-in-one of een multi-node lokale kubernetes cluster op een persoonlijke computer waar Windows, macOS of linux als besturingssysteem \autocite{KubernetesDocs-2023}. Als proof-of-concept wordt er een minikube opgestart op een Linux machine met Docker als driver. In deze Kubernetes cluster wordt er een voorbeeldapplicatie van wordpress met mysql ontplooid om de tools en oplossingen op uit te testen. \newline
+
+Voor het testen van de Kubernetes cluster met de voorbeeldapplicaties in minikube moeten er een aantal programma's geïnstalleerd worden.
 
 \begin{enumerate}
-    \item Minikube installeren
-    \item Minikube starten
+    \item Docker installeren: \url{https://docs.docker.com/engine/install/ubuntu/}
+    \item Minikube installeren: \url{https://minikube.sigs.k8s.io/docs/start/}
+    \item Kubectl installeren: \url{https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/}
 \end{enumerate}
 
+De 3 installaties zijn standaardinstallaties. Er wordt niets verandert aan de configuratie van Docker, minikube en kubectl.
+
+\subsubsection{Wordpress met mysql}
+
+Als voorbeeldapplicatie om de tools en oplossingen op te testen word er een wordpress applicatie opgezet met een mysql database. Voor de ontplooiing van de applicatie wordt er gebruik gemaakt van Persistent Volumes, secrets en een kustomization file.
+Een secret is een object dat gevoelige data bijhoudt zoals een wachtwoord of sleutel. Een kustomization file is een bestand dat helpt bij het beheren van Kubernetes objecten. Het is mogelijk om secrets te maken met genereerders  in een kustomization bestand.
+De volgende paragrafen bevatten een stappenplan voor de configuratie van de voorbeeldapplicatie. Om het overzicht te bewaren worden de stappen abstract beschreven. Meer gedetailleerde stappenplannen zijn terug te vinden in hoofdstuk \ref{ch:Bijlagen} 
+
+De voorbeeld applicatie is gebaseerd op documentatie van kubernetes: \href{https://kubernetes.io/docs/tutorials/stateful-application/mysql-wordpress-persistent-volume/}{Example: Deploying WordPress and MySQL with Persistent Volumes}
+
+\begin{enumerate}
+    \item maak een secret genereerder door middel van een kustomization bestand
+    \item Bronconfiguratie toevoegen voor MySQL en WordPress
+    \item Toepassen en controleren 
+    \item Installeer Wordpress
+\end{enumerate}
+
+\subsection{Tools en oplossingen}
+
+In deze sectie worden de tools Kube-bench, KubeLinter, trivy en cosign uitgetest op de huidige configuratie van Kubernetes en de Wordpress MySQL applicatie. Na het gebruik van elke tool wordt er een conclusie gemaakt. Het uitvoeren van de tool zal in detail besproken worden in de bijlagen \ref{ch:Bijlagen}. 
+
+\subsubsection{Kube-bench}
+
+Kube-bench v0.6.14 is gebruikt voor dit onderzoek. Een gedetailleerde installatie en uitvoering is te vinden in de bijlagen \ref{ch:Bijlagen}
+
+\paragraph{Uitvoeren}
+Kube-bench geeft verschillende methodes voor het uivoeren van de tool. Het is mogelijk om kube-bench te installeren en het is mogelijk om kube-bench als een pod in de cluster te draaien via een gegeven job.yaml bestand. 
+Bij het uivoeren van kube-bench in een pod heeft het enkele voordelen aangezien kube-bench aan meer middelen kan. Een nadeel bij het installeren van kube-bench is dat de tool sudo of root rechten nodig om aan alle bestanden toegang te hebben.
+In dit onderzoek wordt kube-bench in een pod gedraaid voor de best mogelijke resultaten.
+
+Dit zijn de stappen voor het correcte gebruik van kube-bench:
+\begin{enumerate}
+    \item Maak een bestand job.yaml en kopieer de inhoud van de kube-bench configuratie naar de job.yaml
+    \item Voer de job.yaml uit als een job
+    \item Bekijk de logs van de pod
+\end{enumerate}
+
+\paragraph{Conclusie}
+Het resultaat van kube-bench geeft 53 'passes', 13 'failes' en 53 waarschuwingen in totaal. Dit gaat over de master node, de control plane, node, etcd en netwerk beleid. Bij de resultaten geeft kube-bench `Remediations'. Dit zijn manieren om de failed en waarschuwingen op te lossen. Kube-bench geeft een duidelijk resultaat over de configuratie van Kubernetes. De tool vermeldt fouten, waarschuwingen en benchmarks waarvan de configuratie geslaagd is. Het scannen van de kubernetes cluster gaat snel en het gebruik van kube-bench is makkelijk. Het is bijna tot geen moeite om het te installeren en het te gebruiken.
+
+Kube-bench geeft een uitvoer van ongeveer 500~ lijnen. De meest relevante lijnen zijn de waarschuwingen en de gefaalde testen. De testen zijn opgedeeld in hoofdstukken:
+\begin{lstlisting}[language=tex, caption={INFO lijnen kube-bench}]
+    [INFO] 1 Control Plane Security Configuration
+    [INFO] 1.1 Control Plane Node Configuration Files
+    [INFO] 1.2 API Server
+    [INFO] 1.3 Controller Manager
+    [INFO] 1.4 Scheduler
+    [INFO] 2 Etcd Node Configuration
+    [INFO] 2 Etcd Node Configuration
+    [INFO] 3 Control Plane Configuration
+    [INFO] 3.1 Authentication and Authorization
+    [INFO] 3.2 Logging
+    [INFO] 4 Worker Node Security Configuration
+    [INFO] 4.1 Worker Node Configuration Files
+    [INFO] 4.2 Kubelet
+    [INFO] 5 Kubernetes Policies
+    [INFO] 5.1 RBAC and Service Accounts
+    [INFO] 5.2 Pod Security Standards
+    [INFO] 5.3 Network Policies and CNI
+    [INFO] 5.4 Secrets Management
+    [INFO] 5.5 Extensible Admission Control
+    [INFO] 5.7 General Policies
+\end{lstlisting}
+
+Kube-bench is een goede manier om de configuratie van Kubernetes te verbeteren, maar er zijn andere tools nodig om de configuratie verder te optimaliseren. 
+
+\subsubsection{KubeLinter}
+KubeLinter analyseert kubernetes YAML bestanden. In deze proof-of-concept zijn er 2 bestanden die KubeLinter kan analyseren: \textit{mysql-deployment.yaml} en \textit{wordpress-deployment.yaml}. 
+
+\paragraph{Uitvoeren}
+Voor het uitvoeren van KubeLinter zijn deze stappen nodig:
+\begin{enumerate}
+    \item Installeer Go
+    \item Installeer KubeLinter
+    \item Gebruik het KubeLinter commando \textit{kube-linter lint '<bestand>' > resultaten.txt} om de resultaten naar een bestand te schrijven
+    \item Bekijk het \textit{resulaten.txt} tekstbestand om de analyse te bekijken
+\end{enumerate}
+
+\paragraph{Conclusie}
+KubeBench is een sterke tool om Kubernetes YAML bestanden te analyseren op de beste praktijken voor beveiliging. Het is mogelijk om extra analyses toe te voegen, te verwijderen of aan te zetten. Na de installatie van KubeLinter staan er 26 checks aan. Het is mogelijk om er meerdere aan te zetten door de configuratie aan te passen zodat men een sterkere analyse heeft. De github van KubeLinter biedt manieren aan om de configuratie van KubeLinter te wijzigen naar eigen gebruik: \url{https://github.com/stackrox/kube-linter/blob/main/docs/configuring-kubelinter.md}
+
+
+Alle checks voor KubeLinter zijn te vinden op de officiële pagina van de documentatie van KubeLinter: \url{https://docs.kubelinter.io/#/generated/checks }
+
+
+Na de uitvoering van KubeLinter is er duiding op een te lage beveiliging in de Kubernetes bestanden. KubeLinter raadt aan om \textit{readOnlyRootFilesystem} en \textit{runAsNonRoot} in de securitycontext van de configuratie van de pods toe te voegen. Het is aangeraden om andere checks aan te zetten voor een nog strengere analyse van KubeLinter. Het scannen van bestanden gaat snel, er is bijna tot geen delay om een uitvoer te creëren. 
+
+\subsubsection{Trivy}
+
+\paragraph{Uitvoeren}
+Trivy heeft een grote set van mogelijkheden, dit zijn de belangrijkste:
+\begin{itemize}
+    \item Bestanden scannen binnen container images: kwetsbaarheden, misconfiguraties, secrets en licenties
+    \item Misconfiguratie Scannen met mogelijkheid om eigen beleidsregels te maken
+    \item Kubernetes cluster scannen
+    \item SBOM maken en scannen
+\end{itemize}
+
+In deze proof-of-concept worden bovenstaande scans gebruikt om de kwetsbaarheden te identificeren en mogelijke beveiligingsrisico's te analyseren.
+
+
+\paragraph{Conclusie}
+Trivy is een gebruiksvriendelijke tool met betrouwbare en goed geschreven documentatie. Het installatieproces verloopt soepel. Trivy kan gebruikt worden voor diverse doeleinden, zoals het scannen van misconfiguraties, beveiliging van software supply chain en RBAC. Het biedt mogelijkheden zoals het scannen van IaC-bestanden, image-configuraties, bestandssystemen en git-repositories. Met specifieke commando's kunnen gerichte scans worden uitgevoerd, zoals het scannen op kwetsbaarheden, configuraties en secrets. Trivy kan ook kubernetes-clusters scannen, inclusief het genereren van samenvattende rapporten. Het biedt vergelijkbare functionaliteiten als kube-bench, maar gaat verder door het scannen op Pod Security-standaarden. Trivy is een essentiële tool voor de beveiliging van Kubernetes vanwege het scala aan mogelijkheden dat het biedt.
+
+\paragraph{Vergelijking met kube-bench}
+Trivy biedt vergelijkbare mogelijkheden als kube-bench, inclusief het scannen op CIS-benchmarks. Daarnaast kan Trivy ook scannen op Pod Security-standaarden, zoals beschreven in de literatuurstudie. Hoewel Trivy iets langzamer resultaten oplevert, biedt het in beide tools dezelfde juiste hoeveelheid informatie.
+
+
+\subsubsection{OPA - Gatekeeper}
+
+\paragraph{Uitvoeren}
+
+
+Met OPA Gatekeeper is het mogelijk om beleidsregels toe te voegen en aan te passen. Het doel van deze beleidsregels is om foutmeldingen of waarschuwingen te genereren wanneer een configuratie wordt geïmplementeerd die niet voldoet aan de beleidsregels. Zoals in de literatuurstudie beschreven staat, is \textit{privilege escalation}, ook wel de escalatie van privileges genoemd, een belangrijk beveiligingsrisico dat met behulp van OPA Gatekeeper kan worden aangepakt. 
+
+
+Om een beleidsregel te maken voor \textit{privilege escalation} zijn deze stappen nodig:
+\begin{itemize}
+    \item OPA gatekeeper installeren
+    \item De beleidsregel van op de officiële documentatie halen en toepassen
+\end{itemize}
+
+Om te testen dat de beleidsregel werkt wordt het configuratie bestand van \textit{wordpress-deployment.yaml} aangepast. Het veld securityContext wordt toegevoegd met daaronder \textit{allowPrivilegeEscalation: true}. Bij het toepassen van de verandering wordt een foutmelding gegenereerd door OPA Gatekeeper, omdat het veld allowPrivilegeEscalation niet voldoet aan de beleidsregel voor \textit{privilege escalation}. Hierdoor wordt het voorkomen van privilege escalatie bevestigd en wordt de beveiliging van het systeem versterkt.
+
+\paragraph{Conclusie}
+
+OPA Gatekeeper is een waardevol hulpmiddel gebleken voor het toevoegen en aanpassen van beleidsregels om foutmeldingen en waarschuwingen te genereren bij configuraties die niet voldoen aan de gestelde regels. Het specifieke beveiligingsrisico van privilege escalatie kan effectief worden aangepakt met OPA Gatekeeper. Door het installeren van de tool en het toepassen van de juiste beleidsregels, zoals gedocumenteerd, kunnen configuraties worden gecontroleerd. Een test met het aanpassen van een configuratiebestand resulteerde in een foutmelding van OPA Gatekeeper, wat de effectiviteit ervan bevestigt bij het voorkomen van privilege escalatie en het versterken van de systeembeveiliging. Over het algemeen biedt OPA Gatekeeper een belangrijke bijdrage aan het handhaven van beleidsregels en het waarborgen van veilige systeemconfiguraties.
+
+\subsubsection{Kube-hunter}
+
+\paragraph{Uitvoeren}
+
+Kube-hunter kan op twee manieren gebruikt worden voor Kubernetes. 
+\begin{enumerate}
+    \item Op de machine of server zelf om Remote Scanning uit te voeren.
+    \item Binnen een pod in de cluster. Dit geeft een indicatie van de blootstelling van de cluster in het geval dat een van de pods gecompromitteerd is.
+    \item Als een docker container
+\end{enumerate}
+
+In deze proof-of-concept gaan bovenstaande eerste twee manieren gebruikt worden om kwetsbaarheden bekent te maken binnen de cluster. 
+Beide manieren hebben andere installatiemethodes. 
+Voor de uitvoering van de eerste methode zijn deze stappen nodig:
+\begin{enumerate}
+    \item Installeer kube-hunter met pip
+    \item Voor kube-hunter uit
+    \item Kies de gewenste methode van scannen. De methodes zijn: 
+    \begin{itemize}
+        \item Remote scanning      (scant een of meer specifieke IP's of DNS-namen)
+        \item Interface scanning   (scant subnetten op alle lokale netwerkinterfaces)
+        \item IP range scanning    (scant een bepaald IP-bereik)
+    \end{itemize}
+\end{enumerate}
+
+In deze proof-of-concept wordt methode twee gebruikt want de Kubernetes cluster draait lokaal. 
+Uit de uitvoer van kube-hunter blijkt dat er geen kwetsbaarheden zijn gevonden in het Kubernetes-cluster. Het onderzoek heeft twee open services geïdentificeerd: "Etcd" op 192.168.49.2:2379 en "Kubelet API" op 192.168.49.2:10250. Ondanks het vinden van deze services, is er geen enkele kwetsbaarheid ontdekt in het cluster.
+
+Methode twee gaat een pod draaien in de cluster om zo kwetsbaarheden te ontdekken. Onderstaande stappen zijn nodig om dit te verwezenlijken:
+\begin{enumerate}
+    \item Haal kube-hunter op met git clone
+    \item Voer de job uit met kubectl create -f ./job.yaml
+    \item Zoek de pod naam met kubectl describe job kube-hunter
+    \item Bekijk de testresultaten met kubectl logs
+\end{enumerate} 
+
+Bij de uitvoer van het commando \textit{kubectl get pods}, krijgen de pods van kube-hunter een error. De reden hiervoor is onbekend.
+
+\paragraph{Conclusie}
+In deze proof-of-concept met Kube-hunter voor het ontdekken van kwetsbaarheden in een Kubernetes-cluster, zijn geen directe kwetsbaarheden gevonden tijdens het scannen van de interfaces. Hoewel er twee open services zijn geïdentificeerd, namelijk \textit{Etcd} en \textit{Kubelet API}, zijn er geen kwetsbaarheden ontdekt. Het scannen binnen een pod leverde echter errors op, wat de betrouwbaarheid van Kube-hunter voor het uitvoeren van kwetsbaarheidsscans binnen de cluster in twijfel trekt.
